@@ -1,0 +1,25 @@
+# Node modules
+node_modules/
+
+# Environment variables
+.env
+.env*.local
+
+# Uploads
+public/uploads/*
+!public/uploads/.gitkeep
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# IDEs/Editors
+.vscode/
+.idea/
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

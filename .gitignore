@@ -1,0 +1,19 @@
+# Ignore node_modules and builds in subdirectories
+**/node_modules/
+**/dist/
+**/build/
+
+# Ignore sensitive env files
+**/.env
+**/.env.local
+**/.env*.local
+
+# Ignore local uploaded assets
+**/public/uploads/*
+!**/public/uploads/.gitkeep
+
+# System logs and temp files
+**/*.log
+.DS_Store
+.vscode/
+.idea/
