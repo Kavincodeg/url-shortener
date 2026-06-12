@@ -1,27 +1,40 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { Eye, EyeOff, Loader2, Zap } from 'lucide-react';
+import { Eye, EyeOff, Loader2, Zap, Mail, ArrowLeft, ShieldCheck } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import api from '../lib/axios';
 import toast from 'react-hot-toast';
 
 const LoginPage = () => {
   const [form, setForm] = useState({ email: '', password: '' });
   const [showPw, setShowPw] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
+
+  // OTP state
+  const [otpEmail, setOtpEmail] = useState('');
+  const [otpStep, setOtpStep] = useState('idle'); // 'idle' | 'sending' | 'input' | 'verifying'
+  const [otpDigits, setOtpDigits] = useState(['', '', '', '', '', '']);
+  const [countdown, setCountdown] = useState(0);
+  const otpRefs = useRef([]);
+
+  const { login, loginWithToken } = useAuth();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
   useEffect(() => {
     const error = searchParams.get('error');
-    if (error === 'oauth_config_missing') {
-      toast.error('Google credentials are not configured on the server. Please add them to the server .env file.');
-      navigate('/login', { replace: true });
-    } else if (error === 'oauth_failed') {
+    if (error === 'oauth_failed') {
       toast.error('Authentication failed. Please try again.');
       navigate('/login', { replace: true });
     }
   }, [searchParams, navigate]);
+
+  // Countdown timer for resend
+  useEffect(() => {
+    if (countdown <= 0) return;
+    const t = setTimeout(() => setCountdown(c => c - 1), 1000);
+    return () => clearTimeout(t);
+  }, [countdown]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -43,6 +56,80 @@ const LoginPage = () => {
     window.location.href = `${backendUrl}/api/auth/${provider}`;
   };
 
+  // --- OTP handlers ---
+  const handleSendOtp = async () => {
+    if (!otpEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(otpEmail)) {
+      return toast.error('Please enter a valid email address');
+    }
+    setOtpStep('sending');
+    try {
+      const { data } = await api.post('/auth/send-otp', { email: otpEmail });
+      if (data.action === 'direct_login') {
+        // Returning verified user — log in directly
+        loginWithToken(data.token, data.user);
+        toast.success(`Welcome back, ${data.user.name}! 👋`);
+        navigate('/dashboard');
+      } else {
+        // New user — show OTP input
+        setOtpStep('input');
+        setCountdown(60);
+        toast.success('Verification code sent! Check your inbox.');
+        setTimeout(() => otpRefs.current[0]?.focus(), 100);
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Failed to send code');
+      setOtpStep('idle');
+    }
+  };
+
+  const handleOtpDigit = (index, value) => {
+    if (!/^\d?$/.test(value)) return;
+    const next = [...otpDigits];
+    next[index] = value;
+    setOtpDigits(next);
+    if (value && index < 5) otpRefs.current[index + 1]?.focus();
+  };
+
+  const handleOtpKeyDown = (index, e) => {
+    if (e.key === 'Backspace' && !otpDigits[index] && index > 0) {
+      otpRefs.current[index - 1]?.focus();
+    }
+  };
+
+  const handleOtpPaste = (e) => {
+    e.preventDefault();
+    const pasted = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 6);
+    if (pasted.length === 6) {
+      setOtpDigits(pasted.split(''));
+      otpRefs.current[5]?.focus();
+    }
+  };
+
+  const handleVerifyOtp = async () => {
+    const code = otpDigits.join('');
+    if (code.length < 6) return toast.error('Please enter all 6 digits');
+    setOtpStep('verifying');
+    try {
+      const { data } = await api.post('/auth/verify-otp', { email: otpEmail, code });
+      loginWithToken(data.token, data.user);
+      toast.success(`Welcome to Linko, ${data.user.name}! 🎉`);
+      navigate('/dashboard');
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Invalid code');
+      setOtpStep('input');
+      setOtpDigits(['', '', '', '', '', '']);
+      otpRefs.current[0]?.focus();
+    }
+  };
+
+  const resetOtp = () => {
+    setOtpStep('idle');
+    setOtpDigits(['', '', '', '', '', '']);
+    setCountdown(0);
+  };
+
+  const isOtpLoading = otpStep === 'sending' || otpStep === 'verifying';
+
   return (
     <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #EEF2FF 0%, #F5F3FF 50%, #EFF6FF 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
       <div className="animate-fade-in" style={{ width: '100%', maxWidth: 420 }}>
@@ -62,7 +149,7 @@ const LoginPage = () => {
             <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>Login to your account to continue</p>
           </div>
 
-          {/* Social buttons */}
+          {/* Google button */}
           <div style={{ marginBottom: '1.25rem' }}>
             <button className="btn-secondary" style={{ width: '100%', justifyContent: 'center', gap: '0.5rem', fontSize: '0.8125rem', padding: '0.6rem 0.75rem' }}
               onClick={() => handleSocialLogin('google')}>
@@ -71,6 +158,101 @@ const LoginPage = () => {
           </div>
 
           <div className="divider-text" style={{ marginBottom: '1.25rem' }}>or</div>
+
+          {/* Email OTP section */}
+          <div style={{ marginBottom: '1.25rem', border: '1px solid var(--border)', borderRadius: 10, overflow: 'hidden' }}>
+            {/* Header */}
+            <div style={{ background: '#F8FAFC', padding: '0.75rem 1rem', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <Mail size={14} color="var(--primary)" />
+              <span style={{ fontSize: '0.8125rem', fontWeight: 600, color: 'var(--text-primary)' }}>Continue with Email</span>
+              {otpStep !== 'idle' && (
+                <button onClick={resetOtp} style={{ marginLeft: 'auto', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem' }}>
+                  <ArrowLeft size={12} /> Back
+                </button>
+              )}
+            </div>
+
+            <div style={{ padding: '1rem' }}>
+              {/* Step 1: Email input */}
+              {(otpStep === 'idle' || otpStep === 'sending') && (
+                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                  <input
+                    className="input-field"
+                    type="email"
+                    placeholder="Enter your email"
+                    value={otpEmail}
+                    onChange={e => setOtpEmail(e.target.value)}
+                    onKeyDown={e => e.key === 'Enter' && handleSendOtp()}
+                    style={{ flex: 1, height: 38, fontSize: '0.875rem' }}
+                  />
+                  <button
+                    className="btn-primary"
+                    onClick={handleSendOtp}
+                    disabled={isOtpLoading}
+                    style={{ height: 38, padding: '0 1rem', fontSize: '0.8125rem', whiteSpace: 'nowrap' }}
+                  >
+                    {otpStep === 'sending' ? <Loader2 size={14} style={{ animation: 'spin 0.6s linear infinite' }} /> : 'Send Code'}
+                  </button>
+                </div>
+              )}
+
+              {/* Step 2: OTP input */}
+              {(otpStep === 'input' || otpStep === 'verifying') && (
+                <div>
+                  <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '0.875rem', lineHeight: 1.5 }}>
+                    Code sent to <strong style={{ color: 'var(--text-primary)' }}>{otpEmail}</strong>
+                    {' '}— first time only. Future logins are instant.
+                  </p>
+
+                  {/* 6-digit boxes */}
+                  <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.875rem' }} onPaste={handleOtpPaste}>
+                    {otpDigits.map((d, i) => (
+                      <input
+                        key={i}
+                        ref={el => otpRefs.current[i] = el}
+                        type="text"
+                        inputMode="numeric"
+                        maxLength={1}
+                        value={d}
+                        onChange={e => handleOtpDigit(i, e.target.value)}
+                        onKeyDown={e => handleOtpKeyDown(i, e)}
+                        style={{
+                          width: '100%', height: 48, textAlign: 'center', fontSize: '1.25rem', fontWeight: 700,
+                          border: `2px solid ${d ? 'var(--primary)' : 'var(--border)'}`,
+                          borderRadius: 8, outline: 'none', background: 'white',
+                          color: 'var(--text-primary)', transition: 'border-color 0.15s',
+                          fontFamily: 'monospace'
+                        }}
+                      />
+                    ))}
+                  </div>
+
+                  <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                    <button
+                      className="btn-primary"
+                      onClick={handleVerifyOtp}
+                      disabled={isOtpLoading || otpDigits.join('').length < 6}
+                      style={{ flex: 1, height: 38, fontSize: '0.875rem', justifyContent: 'center', gap: '0.375rem' }}
+                    >
+                      {otpStep === 'verifying'
+                        ? <><Loader2 size={14} style={{ animation: 'spin 0.6s linear infinite' }} /> Verifying...</>
+                        : <><ShieldCheck size={14} /> Verify & Login</>}
+                    </button>
+                    <button
+                      className="btn-secondary"
+                      onClick={handleSendOtp}
+                      disabled={countdown > 0 || isOtpLoading}
+                      style={{ height: 38, padding: '0 0.875rem', fontSize: '0.75rem', whiteSpace: 'nowrap' }}
+                    >
+                      {countdown > 0 ? `Resend (${countdown}s)` : 'Resend'}
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="divider-text" style={{ marginBottom: '1.25rem' }}>or sign in with password</div>
 
           <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             <div>
@@ -105,11 +287,6 @@ const LoginPage = () => {
                   {showPw ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
               </div>
-            </div>
-
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <input type="checkbox" id="remember" style={{ accentColor: 'var(--primary)', cursor: 'pointer' }} />
-              <label htmlFor="remember" style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)', cursor: 'pointer' }}>Remember me</label>
             </div>
 
             <button type="submit" className="btn-primary" disabled={loading} style={{ justifyContent: 'center', height: 42, fontSize: '0.9375rem' }}>

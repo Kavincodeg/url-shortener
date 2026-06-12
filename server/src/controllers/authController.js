@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken');
 const { validationResult } = require('express-validator');
 const User = require('../models/User');
+const Otp = require('../models/Otp');
+const { sendOtpEmail } = require('../services/emailService');
 
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRE || '7d' });
@@ -195,6 +197,122 @@ const uploadAvatar = async (req, res, next) => {
   }
 };
 
+// @desc    Smart email auth — direct login if verified, OTP if new
+// @route   POST /api/auth/send-otp
+const sendOtp = async (req, res, next) => {
+  try {
+    const { email } = req.body;
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return res.status(400).json({ success: false, message: 'Please provide a valid email address' });
+    }
+
+    const normalizedEmail = email.toLowerCase().trim();
+    const existingUser = await User.findOne({ email: normalizedEmail });
+
+    // Returning verified user — log in directly, no OTP needed
+    if (existingUser && existingUser.isEmailVerified) {
+      const token = generateToken(existingUser._id);
+      return res.json({
+        success: true,
+        action: 'direct_login',
+        token,
+        user: {
+          id: existingUser._id,
+          name: existingUser.name,
+          email: existingUser.email,
+          plan: existingUser.plan,
+          profileImage: existingUser.profileImage,
+          timezone: existingUser.timezone,
+        },
+      });
+    }
+
+    // New user or unverified — send OTP
+    if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
+      return res.status(500).json({ success: false, message: 'Email service is not configured on the server.' });
+    }
+
+    // Delete any existing unused OTPs for this email
+    await Otp.deleteMany({ email: normalizedEmail });
+
+    // Generate 6-digit code
+    const plainCode = String(Math.floor(100000 + Math.random() * 900000));
+
+    // Save hashed OTP to DB
+    await Otp.create({ email: normalizedEmail, code: plainCode });
+
+    // Send email
+    await sendOtpEmail(normalizedEmail, plainCode);
+
+    res.json({ success: true, action: 'otp_sent', message: 'Verification code sent to your email.' });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Verify OTP, create user if new, return JWT
+// @route   POST /api/auth/verify-otp
+const verifyOtp = async (req, res, next) => {
+  try {
+    const { email, code } = req.body;
+    if (!email || !code) {
+      return res.status(400).json({ success: false, message: 'Email and code are required' });
+    }
+
+    const normalizedEmail = email.toLowerCase().trim();
+
+    // Find latest unused, unexpired OTP for this email
+    const otpDoc = await Otp.findOne({
+      email: normalizedEmail,
+      used: false,
+      expiresAt: { $gt: new Date() },
+    }).sort({ createdAt: -1 });
+
+    if (!otpDoc) {
+      return res.status(400).json({ success: false, message: 'Code expired or not found. Please request a new one.' });
+    }
+
+    const isMatch = await otpDoc.verifyCode(code.trim());
+    if (!isMatch) {
+      return res.status(400).json({ success: false, message: 'Invalid verification code. Please try again.' });
+    }
+
+    // Mark OTP as used
+    otpDoc.used = true;
+    await otpDoc.save();
+
+    // Find or create user
+    let user = await User.findOne({ email: normalizedEmail });
+    if (!user) {
+      // New user — create account (no password, email-verified)
+      const namePart = normalizedEmail.split('@')[0];
+      const name = namePart.charAt(0).toUpperCase() + namePart.slice(1);
+      user = await User.create({ name, email: normalizedEmail, isEmailVerified: true });
+    } else if (!user.isEmailVerified) {
+      user.isEmailVerified = true;
+      await user.save();
+    }
+
+    const token = generateToken(user._id);
+
+    res.json({
+      success: true,
+      action: 'verified',
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        plan: user.plan,
+        profileImage: user.profileImage,
+        timezone: user.timezone,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   register,
   login,
@@ -203,5 +321,7 @@ module.exports = {
   changePassword,
   upgradePlan,
   googleCallback,
-  uploadAvatar
+  uploadAvatar,
+  sendOtp,
+  verifyOtp,
 };
