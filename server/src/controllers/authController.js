@@ -1,6 +1,5 @@
 const jwt = require('jsonwebtoken');
 const { validationResult } = require('express-validator');
-const axios = require('axios');
 const User = require('../models/User');
 
 const generateToken = (id) => {
@@ -149,6 +148,12 @@ const googleCallback = (req, res) => {
       timezone: req.user.timezone
     };
 
+    console.log("CLIENT_URL =", client_url);
+    console.log(
+      "REDIRECTING TO =",
+      `${client_url}/oauth-success?token=${token}`
+    );
+
     res.redirect(`${client_url}/oauth-success?token=${token}&user=${encodeURIComponent(JSON.stringify(userObj))}`);
   } catch (err) {
     console.error('Google OAuth callback handler error:', err.message);
@@ -156,140 +161,6 @@ const googleCallback = (req, res) => {
   }
 };
 
-// @desc    Redirect to GitHub Consent Screen
-// @route   GET /api/auth/github
-const githubLogin = (req, res) => {
-  const client_id = process.env.GITHUB_CLIENT_ID;
-  const redirect_uri = process.env.GITHUB_REDIRECT_URI;
-  const client_url = process.env.CLIENT_URL || 'http://localhost:5173';
-
-  if (!client_id || !process.env.GITHUB_CLIENT_SECRET || !redirect_uri) {
-    console.error('GitHub OAuth credentials not configured on the server');
-    return res.redirect(`${client_url}/login?error=oauth_config_missing`);
-  }
-
-  const url = `https://github.com/login/oauth/authorize?client_id=${encodeURIComponent(client_id)}&redirect_uri=${encodeURIComponent(redirect_uri)}&scope=${encodeURIComponent('user:email')}&state=github`;
-  res.redirect(url);
-};
-
-// @desc    Handle GitHub Callback
-// @route   GET /api/auth/github/callback
-const githubCallback = async (req, res, next) => {
-  const { code, error } = req.query;
-  const client_url = process.env.CLIENT_URL || 'http://localhost:5173';
-
-  if (error) {
-    console.error('GitHub OAuth callback error:', error);
-    return res.redirect(`${client_url}/login?error=oauth_failed`);
-  }
-
-  if (!code) {
-    return res.redirect(`${client_url}/login?error=oauth_failed`);
-  }
-
-  try {
-    const client_id = process.env.GITHUB_CLIENT_ID;
-    const client_secret = process.env.GITHUB_CLIENT_SECRET;
-    const redirect_uri = process.env.GITHUB_REDIRECT_URI;
-
-    if (!client_id || !client_secret || !redirect_uri) {
-      return res.redirect(`${client_url}/login?error=oauth_config_missing`);
-    }
-
-    // Exchange authorization code for access token
-    const tokenResponse = await axios.post('https://github.com/login/oauth/access_token', {
-      client_id,
-      client_secret,
-      code,
-      redirect_uri
-    }, {
-      headers: {
-        Accept: 'application/json'
-      }
-    });
-
-    const { access_token } = tokenResponse.data;
-
-    if (!access_token) {
-      console.error('No access token returned from GitHub');
-      return res.redirect(`${client_url}/login?error=oauth_failed`);
-    }
-
-    // Fetch user profile info
-    const userResponse = await axios.get('https://api.github.com/user', {
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-        'User-Agent': 'Linko-App'
-      }
-    });
-
-    const githubUser = userResponse.data;
-    const githubId = String(githubUser.id);
-    const name = githubUser.name || githubUser.login || 'GitHub User';
-    const profileImage = githubUser.avatar_url || '';
-    let email = githubUser.email?.toLowerCase();
-
-    // If email is not public, fetch user emails
-    if (!email) {
-      const emailsResponse = await axios.get('https://api.github.com/user/emails', {
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-          'User-Agent': 'Linko-App'
-        }
-      });
-      const emails = emailsResponse.data;
-      const primaryEmailObj = emails.find(e => e.primary && e.verified) || emails.find(e => e.primary) || emails[0];
-      email = primaryEmailObj?.email?.toLowerCase();
-    }
-
-    if (!email) {
-      console.error('No email returned from GitHub');
-      return res.redirect(`${client_url}/login?error=oauth_failed`);
-    }
-
-    // Find or create user
-    let user = await User.findOne({ $or: [{ githubId }, { email }] });
-
-    if (user) {
-      // Update existing user's githubId or profileImage if missing
-      let updated = false;
-      if (!user.githubId) {
-        user.githubId = githubId;
-        updated = true;
-      }
-      if (!user.profileImage && profileImage) {
-        user.profileImage = profileImage;
-        updated = true;
-      }
-      if (updated) {
-        await user.save();
-      }
-    } else {
-      // Create new user
-      user = await User.create({
-        name,
-        email,
-        githubId,
-        profileImage
-      });
-    }
-
-    const token = generateToken(user._id);
-    const userObj = {
-      id: user._id,
-      name: user.name,
-      email: user.email,
-      plan: user.plan,
-      profileImage: user.profileImage,
-      timezone: user.timezone
-    };
-
-    res.redirect(`${client_url}/oauth-success?token=${token}&user=${encodeURIComponent(JSON.stringify(userObj))}`);
-  } catch (err) {
-    console.error('GitHub OAuth callback handler error:', err.response?.data || err.message);
-    res.redirect(`${client_url}/login?error=oauth_failed`);
-  }
-};
 
 // @desc    Upload avatar
 // @route   POST /api/auth/upload-avatar
@@ -332,7 +203,5 @@ module.exports = {
   changePassword,
   upgradePlan,
   googleCallback,
-  githubLogin,
-  githubCallback,
   uploadAvatar
 };

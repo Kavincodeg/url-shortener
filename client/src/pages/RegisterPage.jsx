@@ -57,13 +57,11 @@ const RegisterPage = () => {
           </div>
 
           {/* Social buttons */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '1.25rem' }}>
-            {['Google', 'GitHub'].map((provider) => (
-              <button key={provider} className="btn-secondary" style={{ justifyContent: 'center', fontSize: '0.8125rem', padding: '0.6rem' }}
-                onClick={() => handleSocialLogin(provider)}>
-                {provider === 'Google' ? '🟢' : '⚫'} {provider}
-              </button>
-            ))}
+          <div style={{ marginBottom: '1.25rem' }}>
+            <button className="btn-secondary" style={{ width: '100%', justifyContent: 'center', fontSize: '0.8125rem', padding: '0.6rem' }}
+              onClick={() => handleSocialLogin('Google')}>
+              🟢 Continue with Google
+            </button>
           </div>
 
           <div className="divider-text" style={{ marginBottom: '1.25rem' }}>or</div>

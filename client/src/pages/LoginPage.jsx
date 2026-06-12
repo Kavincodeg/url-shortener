@@ -15,7 +15,7 @@ const LoginPage = () => {
   useEffect(() => {
     const error = searchParams.get('error');
     if (error === 'oauth_config_missing') {
-      toast.error('Google/GitHub credentials are not configured on the server. Please add them to the server .env file.');
+      toast.error('Google credentials are not configured on the server. Please add them to the server .env file.');
       navigate('/login', { replace: true });
     } else if (error === 'oauth_failed') {
       toast.error('Authentication failed. Please try again.');
@@ -63,16 +63,11 @@ const LoginPage = () => {
           </div>
 
           {/* Social buttons */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '1.25rem' }}>
-            {[
-              { label: 'Continue with Google', icon: '🟢', provider: 'google' },
-              { label: 'Continue with GitHub', icon: '⚫', provider: 'github' },
-            ].map(({ label, icon, provider }) => (
-              <button key={label} className="btn-secondary" style={{ justifyContent: 'center', gap: '0.5rem', fontSize: '0.8125rem', padding: '0.6rem 0.75rem' }}
-                onClick={() => handleSocialLogin(provider)}>
-                <span>{icon}</span> {label.split(' ')[2]}
-              </button>
-            ))}
+          <div style={{ marginBottom: '1.25rem' }}>
+            <button className="btn-secondary" style={{ width: '100%', justifyContent: 'center', gap: '0.5rem', fontSize: '0.8125rem', padding: '0.6rem 0.75rem' }}
+              onClick={() => handleSocialLogin('google')}>
+              <span>🟢</span> Continue with Google
+            </button>
           </div>
 
           <div className="divider-text" style={{ marginBottom: '1.25rem' }}>or</div>
