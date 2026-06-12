@@ -38,8 +38,8 @@ const LoginPage = () => {
   };
 
   const handleSocialLogin = (provider) => {
-    const backendUrl = import.meta.env.VITE_API_URL || 
-      (window.location.hostname === 'localhost' ? 'http://localhost:5000' : window.location.origin);
+    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+    const backendUrl = apiUrl.replace(/\/api$/, '');
     window.location.href = `${backendUrl}/api/auth/${provider}`;
   };
 
