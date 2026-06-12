@@ -246,6 +246,11 @@ const sendOtp = async (req, res, next) => {
 
     res.json({ success: true, action: 'otp_sent', message: 'Verification code sent to your email.' });
   } catch (error) {
+    console.error('[sendOtp] Error:', error.message);
+    // Return specific error for email issues
+    if (error.message.includes('Invalid login') || error.message.includes('Username and Password') || error.message.includes('auth')) {
+      return res.status(500).json({ success: false, message: 'Email service authentication failed. Please contact support.' });
+    }
     next(error);
   }
 };

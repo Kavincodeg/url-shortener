@@ -1,17 +1,24 @@
 const nodemailer = require('nodemailer');
 
 const createTransporter = () => {
+  const user = process.env.GMAIL_USER;
+  const pass = process.env.GMAIL_APP_PASSWORD;
+
+  if (!user || !pass) {
+    throw new Error('GMAIL_USER or GMAIL_APP_PASSWORD env var is missing');
+  }
+
   return nodemailer.createTransport({
     service: 'gmail',
-    auth: {
-      user: process.env.GMAIL_USER,
-      pass: process.env.GMAIL_APP_PASSWORD,
-    },
+    auth: { user, pass },
   });
 };
 
 const sendOtpEmail = async (email, code) => {
   const transporter = createTransporter();
+
+  // Verify connection before sending
+  await transporter.verify();
 
   const mailOptions = {
     from: `"Linko" <${process.env.GMAIL_USER}>`,
@@ -45,7 +52,7 @@ const sendOtpEmail = async (email, code) => {
           </div>
 
           <p style="color: #94A3B8; font-size: 12px; margin: 0; line-height: 1.6;">
-            If you didn't request this code, you can safely ignore this email. Someone may have entered your email by mistake.
+            If you didn't request this code, you can safely ignore this email.
           </p>
         </div>
 
@@ -58,6 +65,7 @@ const sendOtpEmail = async (email, code) => {
   };
 
   await transporter.sendMail(mailOptions);
+  console.log(`[emailService] OTP sent successfully to ${email}`);
 };
 
 module.exports = { sendOtpEmail };
