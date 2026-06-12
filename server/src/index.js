@@ -22,6 +22,9 @@ const bulkRoutes = require('./routes/bulkRoutes');
 
 const app = express();
 
+// Trust Render/Vercel/Heroku proxy (fixes express-rate-limit X-Forwarded-For error)
+app.set('trust proxy', 1);
+
 // Connect to MongoDB
 connectDB();
 
