@@ -1,6 +1,7 @@
 const express = require('express');
+const passport = require('passport');
 const { body } = require('express-validator');
-const { register, login, getMe, updateProfile, changePassword, upgradePlan, googleLogin, googleCallback, githubLogin, githubCallback, uploadAvatar } = require('../controllers/authController');
+const { register, login, getMe, updateProfile, changePassword, upgradePlan, googleCallback, githubLogin, githubCallback, uploadAvatar } = require('../controllers/authController');
 const { protect } = require('../middleware/auth');
 const { authLimiter } = require('../middleware/rateLimiter');
 const { uploadAvatar: uploadAvatarMiddleware } = require('../middleware/upload');
@@ -19,8 +20,8 @@ router.post('/login', authLimiter, [
 ], login);
 
 // OAuth Routes
-router.get('/google', googleLogin);
-router.get('/google/callback', googleCallback);
+router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+router.get('/google/callback', passport.authenticate('google', { failureRedirect: '/login?error=oauth_failed', session: false }), googleCallback);
 router.get('/github', githubLogin);
 router.get('/github/callback', githubCallback);
 

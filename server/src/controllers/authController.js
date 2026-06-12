@@ -130,119 +130,28 @@ const upgradePlan = async (req, res, next) => {
   }
 };
 
-// @desc    Redirect to Google Consent Screen
-// @route   GET /api/auth/google
-const googleLogin = (req, res) => {
-  const client_id = process.env.GOOGLE_CLIENT_ID;
-  const redirect_uri = process.env.GOOGLE_REDIRECT_URI;
-  const client_url = process.env.CLIENT_URL || 'http://localhost:5173';
-
-  if (!client_id || !process.env.GOOGLE_CLIENT_SECRET || !redirect_uri) {
-    console.error('Google OAuth credentials not configured on the server');
-    return res.redirect(`${client_url}/login?error=oauth_config_missing`);
-  }
-
-  const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${encodeURIComponent(client_id)}&redirect_uri=${encodeURIComponent(redirect_uri)}&response_type=code&scope=${encodeURIComponent('profile email')}&state=google`;
-  res.redirect(url);
-};
-
 // @desc    Handle Google Callback
 // @route   GET /api/auth/google/callback
-const googleCallback = async (req, res, next) => {
-  const { code, error } = req.query;
+const googleCallback = (req, res) => {
   const client_url = process.env.CLIENT_URL || 'http://localhost:5173';
-
-  if (error) {
-    console.error('Google OAuth callback error:', error);
-    return res.redirect(`${client_url}/login?error=oauth_failed`);
-  }
-
-  if (!code) {
+  if (!req.user) {
     return res.redirect(`${client_url}/login?error=oauth_failed`);
   }
 
   try {
-    const client_id = process.env.GOOGLE_CLIENT_ID;
-    const client_secret = process.env.GOOGLE_CLIENT_SECRET;
-    const redirect_uri = process.env.GOOGLE_REDIRECT_URI;
-
-    if (!client_id || !client_secret || !redirect_uri) {
-      return res.redirect(`${client_url}/login?error=oauth_config_missing`);
-    }
-
-    // Exchange authorization code for access token
-    const tokenResponse = await axios.post('https://oauth2.googleapis.com/token', new URLSearchParams({
-      code,
-      client_id,
-      client_secret,
-      redirect_uri,
-      grant_type: 'authorization_code'
-    }).toString(), {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      }
-    });
-
-    const { access_token } = tokenResponse.data;
-
-    // Fetch user info using the access token
-    const userInfoResponse = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
-      headers: {
-        Authorization: `Bearer ${access_token}`
-      }
-    });
-
-    const googleUser = userInfoResponse.data;
-    const email = googleUser.email?.toLowerCase();
-    const googleId = googleUser.sub;
-    const name = googleUser.name || googleUser.given_name || 'Google User';
-    const profileImage = googleUser.picture || '';
-
-    if (!email) {
-      console.error('No email returned from Google');
-      return res.redirect(`${client_url}/login?error=oauth_failed`);
-    }
-
-    // Find or create the user
-    let user = await User.findOne({ $or: [{ googleId }, { email }] });
-
-    if (user) {
-      // If user exists but googleId is not set, link the account
-      let updated = false;
-      if (!user.googleId) {
-        user.googleId = googleId;
-        updated = true;
-      }
-      if (!user.profileImage && profileImage) {
-        user.profileImage = profileImage;
-        updated = true;
-      }
-      if (updated) {
-        await user.save();
-      }
-    } else {
-      // Create new user
-      user = await User.create({
-        name,
-        email,
-        googleId,
-        profileImage,
-      });
-    }
-
-    const token = generateToken(user._id);
+    const token = generateToken(req.user._id);
     const userObj = {
-      id: user._id,
-      name: user.name,
-      email: user.email,
-      plan: user.plan,
-      profileImage: user.profileImage,
-      timezone: user.timezone
+      id: req.user._id,
+      name: req.user.name,
+      email: req.user.email,
+      plan: req.user.plan,
+      profileImage: req.user.profileImage,
+      timezone: req.user.timezone
     };
 
     res.redirect(`${client_url}/oauth-success?token=${token}&user=${encodeURIComponent(JSON.stringify(userObj))}`);
   } catch (err) {
-    console.error('Google OAuth callback handler error:', err.response?.data || err.message);
+    console.error('Google OAuth callback handler error:', err.message);
     res.redirect(`${client_url}/login?error=oauth_failed`);
   }
 };
@@ -422,7 +331,6 @@ module.exports = {
   updateProfile,
   changePassword,
   upgradePlan,
-  googleLogin,
   googleCallback,
   githubLogin,
   githubCallback,
