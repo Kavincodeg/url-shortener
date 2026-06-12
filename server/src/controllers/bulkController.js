@@ -51,8 +51,17 @@ const bulkUpload = async (req, res, next) => {
       const originalUrl = row.url || row.URL || row.originalUrl || Object.values(row)[0];
       const customAlias = useCustomAliases === 'true' ? (row.alias || row.customAlias) : undefined;
 
-      if (!originalUrl || !originalUrl.startsWith('http')) {
-        results.push({ originalUrl, status: 'error', error: 'Invalid URL' });
+      // Bug fix: use URL constructor for proper validation instead of just startsWith check
+      let isValidUrl = false;
+      try {
+        const parsed = new URL(originalUrl);
+        isValidUrl = ['http:', 'https:'].includes(parsed.protocol);
+      } catch {
+        isValidUrl = false;
+      }
+
+      if (!originalUrl || !isValidUrl) {
+        results.push({ originalUrl, status: 'error', error: 'Invalid URL (must start with http:// or https://)' });
         continue;
       }
 

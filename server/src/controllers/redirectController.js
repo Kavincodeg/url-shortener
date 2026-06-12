@@ -50,8 +50,16 @@ const recordVisit = async (urlId, req) => {
 
     const ip = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.socket.remoteAddress || 'Unknown';
 
-    const referrer = req.headers.referer || req.headers.referrer || 'Direct';
-    const referrerDomain = referrer !== 'Direct' ? new URL(referrer).hostname : 'Direct';
+    const referrerHeader = req.headers.referer || req.headers.referrer || '';
+    let referrerDomain = 'Direct';
+    if (referrerHeader) {
+      try {
+        referrerDomain = new URL(referrerHeader).hostname;
+      } catch {
+        // Bug fix: malformed referrer headers shouldn't crash visit recording
+        referrerDomain = referrerHeader.split('/')[0].slice(0, 100) || 'Unknown';
+      }
+    }
 
     const geo = await getGeoInfo(ip);
 

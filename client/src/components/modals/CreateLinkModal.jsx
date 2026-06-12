@@ -29,7 +29,8 @@ const CreateLinkModal = ({ onClose, onCreated, editUrl }) => {
       }
     }, 500);
     return () => clearTimeout(t);
-  }, [form.customAlias]);
+  // Bug fix: include editUrl in deps so the stale-closure check uses the current editUrl alias
+  }, [form.customAlias, editUrl]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

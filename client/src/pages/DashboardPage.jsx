@@ -91,10 +91,10 @@ const DashboardPage = () => {
   };
 
   const kpis = [
-    { icon: Link2, label: 'Total Links', value: urls.length, sub: '+12 this month', subColor: 'var(--success)', iconBg: '#EEF2FF', iconColor: '#4F46E5' },
-    { icon: MousePointerClick, label: 'Total Clicks', value: totalClicks.toLocaleString(), sub: '+18.2% this month', subColor: 'var(--success)', iconBg: '#D1FAE5', iconColor: '#059669' },
+    { icon: Link2, label: 'Total Links', value: urls.length, sub: `${urls.length} link${urls.length !== 1 ? 's' : ''} created`, iconBg: '#EEF2FF', iconColor: '#4F46E5' },
+    { icon: MousePointerClick, label: 'Total Clicks', value: totalClicks.toLocaleString(), sub: totalClicks > 0 ? `across ${urls.length} link${urls.length !== 1 ? 's' : ''}` : 'No clicks yet', subColor: totalClicks > 0 ? 'var(--success)' : undefined, iconBg: '#D1FAE5', iconColor: '#059669' },
     { icon: CheckCircle2, label: 'Active Links', value: activeLinks, sub: `${urls.length ? Math.round(activeLinks / urls.length * 100) : 0}% of total`, iconBg: '#FEF3C7', iconColor: '#D97706' },
-    { icon: Clock, label: 'Expired Links', value: expiredLinks, sub: `${urls.length ? Math.round(expiredLinks / urls.length * 100) : 0}% of total`, subColor: 'var(--danger)', iconBg: '#FEE2E2', iconColor: '#EF4444' },
+    { icon: Clock, label: 'Expired Links', value: expiredLinks, sub: `${urls.length ? Math.round(expiredLinks / urls.length * 100) : 0}% of total`, subColor: expiredLinks > 0 ? 'var(--danger)' : undefined, iconBg: '#FEE2E2', iconColor: '#EF4444' },
   ];
 
   return (

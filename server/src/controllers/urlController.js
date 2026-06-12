@@ -69,19 +69,27 @@ const getUrls = async (req, res, next) => {
     const { search, filter, page = 1, limit = 10 } = req.query;
     const query = { userId: req.user._id, isDeleted: false };
 
-    if (search) {
-      query.$or = [
-        { originalUrl: { $regex: search, $options: 'i' } },
-        { shortCode: { $regex: search, $options: 'i' } },
-        { customAlias: { $regex: search, $options: 'i' } },
-      ];
-    }
+    const searchConditions = search ? [
+      { originalUrl: { $regex: search, $options: 'i' } },
+      { shortCode: { $regex: search, $options: 'i' } },
+      { customAlias: { $regex: search, $options: 'i' } },
+    ] : null;
 
     const now = new Date();
+
+    // Bug fix: combining search $or and filter $or requires $and to avoid overwriting
     if (filter === 'active') {
-      query.$or = [{ expiresAt: null }, { expiresAt: { $gt: now } }];
+      const filterOr = [{ expiresAt: null }, { expiresAt: { $gt: now } }];
+      if (searchConditions) {
+        query.$and = [{ $or: searchConditions }, { $or: filterOr }];
+      } else {
+        query.$or = filterOr;
+      }
     } else if (filter === 'expired') {
       query.expiresAt = { $lte: now };
+      if (searchConditions) query.$or = searchConditions;
+    } else {
+      if (searchConditions) query.$or = searchConditions;
     }
 
     const total = await Url.countDocuments(query);
@@ -132,7 +140,8 @@ const updateUrl = async (req, res, next) => {
 
     const updates = {};
     if (originalUrl) updates.originalUrl = originalUrl;
-    if (customAlias !== undefined) updates.customAlias = customAlias ? customAlias.toLowerCase() : undefined;
+    // Bug fix: use null (not undefined) to properly clear the alias in MongoDB
+    if (customAlias !== undefined) updates.customAlias = customAlias ? customAlias.toLowerCase() : null;
     if (expiresAt !== undefined) updates.expiresAt = expiresAt || null;
 
     const updated = await Url.findByIdAndUpdate(url._id, updates, { new: true, runValidators: true });

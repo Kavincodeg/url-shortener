@@ -25,10 +25,11 @@ const MyLinksPage = () => {
   const [showEdit, setShowEdit] = useState(null);
   const [showQR, setShowQR] = useState(null);
 
-  const fetchUrls = useCallback(async () => {
+  const fetchUrls = useCallback(async (overridePage) => {
     setLoading(true);
     try {
-      const params = new URLSearchParams({ page, limit, ...(search && { search }), ...(filter !== 'all' && { filter }) });
+      const activePage = overridePage ?? page;
+      const params = new URLSearchParams({ page: activePage, limit, ...(search && { search }), ...(filter !== 'all' && { filter }) });
       const { data } = await api.get(`/urls?${params}`);
       setUrls(data.urls || []);
       setTotal(data.pagination?.total || 0);
@@ -42,9 +43,14 @@ const MyLinksPage = () => {
 
   useEffect(() => { fetchUrls(); }, [fetchUrls]);
 
-  // Debounce search
+  // Bug fix: debounce the page-reset when search/filter changes to avoid double-fetch.
+  // We reset the page to 1 and immediately call fetchUrls with page=1 in one go.
+  const isFirstRender = useState(true);
   useEffect(() => {
+    if (isFirstRender[0]) { isFirstRender[0] = false; return; }
     setPage(1);
+    fetchUrls(1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search, filter]);
 
   const copyLink = (shortUrl) => {

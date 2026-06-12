@@ -68,8 +68,10 @@ const getAnalytics = async (req, res, next) => {
       ]),
     ]);
 
-    const avgDailyClicks = dailyTrend.length > 0
-      ? Math.round(dailyTrend.reduce((sum, d) => sum + d.count, 0) / dailyTrend.length)
+    // Bug fix: divide by the full time window (not just days with clicks) for accurate average
+    const totalClicksInWindow = dailyTrend.reduce((sum, d) => sum + d.count, 0);
+    const avgDailyClicks = Number(days) > 0
+      ? Math.round(totalClicksInWindow / Number(days))
       : 0;
 
     res.json({

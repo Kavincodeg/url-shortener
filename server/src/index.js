@@ -56,7 +56,12 @@ app.get('/api/health', (req, res) => {
 });
 
 // Redirect route (must be last before error handler)
-app.get('/:shortCode', redirectLimiter, redirect);
+// Bug fix: skip DB lookup for common static file requests
+const STATIC_SKIP = new Set(['favicon.ico', 'robots.txt', 'sitemap.xml', 'apple-touch-icon.png']);
+app.get('/:shortCode', redirectLimiter, (req, res, next) => {
+  if (STATIC_SKIP.has(req.params.shortCode)) return res.status(404).send();
+  return redirect(req, res, next);
+});
 
 // 404 handler for unknown API routes
 app.use('/api', (req, res) => {

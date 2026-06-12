@@ -8,8 +8,11 @@ const geoip = require('geoip-lite');
  */
 const getGeoInfo = async (ip) => {
   try {
-    // Skip for localhost/private IPs
-    if (!ip || ip === '127.0.0.1' || ip === '::1' || ip.startsWith('192.168') || ip.startsWith('10.')) {
+    // Skip for localhost/private IPs (includes 10.x, 172.16-31.x, 192.168.x)
+    if (!ip || ip === '127.0.0.1' || ip === '::1'
+      || ip.startsWith('192.168.')
+      || ip.startsWith('10.')
+      || /^172\.(1[6-9]|2[0-9]|3[01])\./.test(ip)) {
       return { country: 'Local', city: 'Local' };
     }
 

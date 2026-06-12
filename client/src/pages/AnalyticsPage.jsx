@@ -59,7 +59,8 @@ const AnalyticsPage = () => {
   };
 
   const shareLink = async () => {
-    const shareUrl = data?.url?.shortUrl || shortUrl;
+    // Bug fix: derive shortUrl directly from data instead of referencing a later const
+    const shareUrl = data?.url?.shortUrl || '';
     const shareData = {
       title: 'Short Link',
       text: `Original URL: ${data?.url?.originalUrl}`,

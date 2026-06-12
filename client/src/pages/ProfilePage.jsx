@@ -8,6 +8,13 @@ import toast from 'react-hot-toast';
 const TABS = ['Profile', 'Security', 'Notifications'];
 const TIMEZONES = ['UTC', 'Asia/Kolkata', 'America/New_York', 'America/Los_Angeles', 'Europe/London', 'Europe/Paris', 'Asia/Tokyo', 'Asia/Singapore', 'Australia/Sydney'];
 
+const NOTIFICATION_PREFS_KEY = 'linko_notif_prefs';
+const DEFAULT_NOTIF_PREFS = {
+  linkExpiry: true,
+  weeklyReport: true,
+  securityAlerts: true,
+};
+
 const ProfilePage = () => {
   const { user, updateUser } = useAuth();
   const [activeTab, setActiveTab] = useState('Profile');
@@ -16,6 +23,16 @@ const ProfilePage = () => {
   const [saving, setSaving] = useState(false);
   const [savingPw, setSavingPw] = useState(false);
   const fileInputRef = useRef(null);
+  // Bug fix: notification prefs are now controlled state persisted to localStorage
+  const [notifPrefs, setNotifPrefs] = useState(() => {
+    try { return { ...DEFAULT_NOTIF_PREFS, ...JSON.parse(localStorage.getItem(NOTIFICATION_PREFS_KEY) || '{}') }; }
+    catch { return DEFAULT_NOTIF_PREFS; }
+  });
+  const togglePref = (key) => setNotifPrefs(prev => ({ ...prev, [key]: !prev[key] }));
+  const saveNotifPrefs = () => {
+    localStorage.setItem(NOTIFICATION_PREFS_KEY, JSON.stringify(notifPrefs));
+    toast.success('Preferences saved!');
+  };
 
   const saveProfile = async (e) => {
     e.preventDefault();
@@ -186,24 +203,24 @@ const ProfilePage = () => {
             </h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
               {[
-                { label: 'Link expiry alerts', desc: 'Get notified before your links expire' },
-                { label: 'Weekly analytics report', desc: 'Receive a weekly summary of your link performance' },
-                { label: 'Security alerts', desc: 'Get notified about suspicious activity' },
-              ].map(({ label, desc }) => (
-                <div key={label} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.875rem', background: '#F8FAFC', borderRadius: 8, border: '1px solid var(--border)' }}>
+                { key: 'linkExpiry', label: 'Link expiry alerts', desc: 'Get notified before your links expire' },
+                { key: 'weeklyReport', label: 'Weekly analytics report', desc: 'Receive a weekly summary of your link performance' },
+                { key: 'securityAlerts', label: 'Security alerts', desc: 'Get notified about suspicious activity' },
+              ].map(({ key, label, desc }) => (
+                <div key={key} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.875rem', background: '#F8FAFC', borderRadius: 8, border: '1px solid var(--border)' }}>
                   <div>
                     <div style={{ fontSize: '0.875rem', fontWeight: 600 }}>{label}</div>
                     <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{desc}</div>
                   </div>
                   <label className="toggle">
-                    <input type="checkbox" defaultChecked />
+                    <input type="checkbox" checked={notifPrefs[key]} onChange={() => togglePref(key)} />
                     <span className="toggle-slider" />
                   </label>
                 </div>
               ))}
             </div>
             <div style={{ marginTop: '1.25rem', display: 'flex', justifyContent: 'flex-end' }}>
-              <button className="btn-primary" onClick={() => toast.success('Preferences saved!')}><Save size={14} /> Save Preferences</button>
+              <button className="btn-primary" onClick={saveNotifPrefs}><Save size={14} /> Save Preferences</button>
             </div>
           </div>
         )}
