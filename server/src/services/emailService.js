@@ -8,9 +8,14 @@ const createTransporter = () => {
     throw new Error('GMAIL_USER or GMAIL_APP_PASSWORD env var is missing');
   }
 
+  // Use port 587 + STARTTLS — works on Render free tier (port 465 is blocked)
   return nodemailer.createTransport({
-    service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 587,
+    secure: false, // STARTTLS
     auth: { user, pass },
+    connectionTimeout: 10000,
+    greetingTimeout: 10000,
   });
 };
 
