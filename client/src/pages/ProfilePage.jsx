@@ -207,7 +207,7 @@ const ProfilePage = () => {
                 { key: 'weeklyReport', label: 'Weekly analytics report', desc: 'Receive a weekly summary of your link performance' },
                 { key: 'securityAlerts', label: 'Security alerts', desc: 'Get notified about suspicious activity' },
               ].map(({ key, label, desc }) => (
-                <div key={key} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.875rem', background: '#F8FAFC', borderRadius: 8, border: '1px solid var(--border)' }}>
+                <div key={key} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.875rem', background: 'var(--bg-secondary)', borderRadius: 8, border: '1px solid var(--border)' }}>
                   <div>
                     <div style={{ fontSize: '0.875rem', fontWeight: 600 }}>{label}</div>
                     <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{desc}</div>

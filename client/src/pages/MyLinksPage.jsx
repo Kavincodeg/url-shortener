@@ -133,7 +133,7 @@ const MyLinksPage = () => {
             </div>
           ) : urls.length === 0 ? (
             <div style={{ padding: '4rem', textAlign: 'center' }}>
-              <div style={{ width: 80, height: 80, background: '#F1F5F9', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1rem' }}>
+              <div style={{ width: 80, height: 80, background: 'var(--bg-secondary)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1rem' }}>
                 <Link2 size={36} color="var(--text-muted)" />
               </div>
               <h3 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '0.5rem' }}>No links yet!</h3>

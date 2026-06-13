@@ -7,7 +7,7 @@ const AppLayout = ({ children, onLinkCreated }) => {
   const [showCreate, setShowCreate] = useState(false);
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#F8FAFC' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--bg-body)' }}>
       <Sidebar />
       <div className="main-content" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         <TopNavbar onCreateLink={() => setShowCreate(true)} />

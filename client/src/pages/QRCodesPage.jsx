@@ -107,7 +107,7 @@ const QRCodesPage = () => {
           </div>
         ) : filteredLinks.length === 0 ? (
           <div className="card animate-fade-in" style={{ padding: '4rem 2rem', textAlign: 'center' }}>
-            <div style={{ width: 56, height: 56, borderRadius: '50%', background: '#EEF2FF', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1rem' }}>
+            <div style={{ width: 56, height: 56, borderRadius: '50%', background: 'var(--primary-light)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1rem' }}>
               <QrCode size={24} color="var(--primary)" />
             </div>
             <h3 style={{ fontSize: '1.125rem', fontWeight: 700, marginBottom: '0.5rem' }}>No QR Codes Found</h3>
@@ -123,7 +123,7 @@ const QRCodesPage = () => {
                 <div key={link._id} className="card animate-fade-in" style={{ display: 'flex', flexDirection: 'column', height: '100%', padding: '1.25rem', transition: 'transform 0.2s, box-shadow 0.2s' }}>
                   
                   {/* QR Image Container */}
-                  <div style={{ background: '#F8FAFC', borderRadius: 8, padding: '1.5rem', display: 'flex', justifyContent: 'center', alignItems: 'center', border: '1px solid var(--border)', marginBottom: '1rem', aspectRatio: '1/1' }}>
+                  <div style={{ background: 'var(--bg-secondary)', borderRadius: 8, padding: '1.5rem', display: 'flex', justifyContent: 'center', alignItems: 'center', border: '1px solid var(--border)', marginBottom: '1rem', aspectRatio: '1/1' }}>
                     <QRImage urlId={link._id} alt={`QR for ${link.customAlias || link.shortCode}`} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
                   </div>
 

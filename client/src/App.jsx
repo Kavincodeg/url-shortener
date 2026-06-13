@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './context/AuthContext';
+import { ThemeProvider } from './context/ThemeContext';
 import ProtectedRoute from './components/ProtectedRoute';
 
 // Public pages
@@ -24,7 +25,8 @@ import BillingPage from './pages/BillingPage';
 
 const App = () => {
   return (
-    <AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
       <BrowserRouter>
         <Routes>
           {/* Public routes */}
@@ -56,7 +58,7 @@ const App = () => {
           toastOptions={{
             style: {
               borderRadius: '10px',
-              background: '#0F172A',
+              background: 'var(--text-primary)',
               color: '#F8FAFC',
               fontSize: '0.875rem',
               fontFamily: 'Inter, sans-serif',
@@ -75,7 +77,8 @@ const App = () => {
           }}
         />
       </BrowserRouter>
-    </AuthProvider>
+      </AuthProvider>
+    </ThemeProvider>
   );
 };
 

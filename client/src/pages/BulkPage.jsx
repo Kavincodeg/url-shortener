@@ -94,7 +94,7 @@ const BulkPage = () => {
           </div>
 
           {/* Options */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '1.25rem', padding: '1rem', background: '#F8FAFC', borderRadius: 10, border: '1px solid var(--border)' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '1.25rem', padding: '1rem', background: 'var(--bg-secondary)', borderRadius: 10, border: '1px solid var(--border)' }}>
             <h3 style={{ fontSize: '0.875rem', fontWeight: 700, marginBottom: '0.25rem' }}>Options</h3>
             <label style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', fontSize: '0.875rem', cursor: 'pointer' }}>
               <input type="checkbox" checked={options.useCustomAliases} onChange={e => setOptions({ ...options, useCustomAliases: e.target.checked })} style={{ accentColor: 'var(--primary)', width: 16, height: 16 }} />

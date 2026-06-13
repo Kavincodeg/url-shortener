@@ -239,7 +239,7 @@ const BillingPage = () => {
                     <td style={{ padding: '0.875rem 0.5rem', fontWeight: 500 }}>Linko Pro Subscription — Monthly</td>
                     <td style={{ padding: '0.875rem 0.5rem' }}>$9.00</td>
                     <td style={{ padding: '0.875rem 0.5rem' }}>
-                      <span style={{ fontSize: '0.75rem', padding: '0.125rem 0.5rem', borderRadius: 4, background: '#D1FAE5', color: '#065F46', fontWeight: 600 }}>Paid</span>
+                      <span style={{ fontSize: '0.75rem', padding: '0.125rem 0.5rem', borderRadius: 4, background: 'var(--success-light)', color: '#065F46', fontWeight: 600 }}>Paid</span>
                     </td>
                   </tr>
                 )}
@@ -248,7 +248,7 @@ const BillingPage = () => {
                   <td style={{ padding: '0.875rem 0.5rem' }}>Free Plan Account Creation</td>
                   <td style={{ padding: '0.875rem 0.5rem' }}>$0.00</td>
                   <td style={{ padding: '0.875rem 0.5rem' }}>
-                    <span style={{ fontSize: '0.75rem', padding: '0.125rem 0.5rem', borderRadius: 4, background: '#F1F5F9', color: '#475569', fontWeight: 600 }}>Active</span>
+                    <span style={{ fontSize: '0.75rem', padding: '0.125rem 0.5rem', borderRadius: 4, background: 'var(--bg-secondary)', color: '#475569', fontWeight: 600 }}>Active</span>
                   </td>
                 </tr>
               </tbody>
@@ -261,7 +261,7 @@ const BillingPage = () => {
           <div style={{ position: 'fixed', inset: 0, background: 'rgba(15, 23, 42, 0.4)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100, padding: '1rem' }}>
             <div className="card animate-scale-in" style={{ maxWidth: 420, width: '100%', padding: '1.75rem', position: 'relative' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.25rem' }}>
-                <div style={{ width: 36, height: 36, borderRadius: '50%', background: '#EEF2FF', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--primary)' }}>
+                <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'var(--primary-light)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--primary)' }}>
                   <CreditCard size={18} />
                 </div>
                 <div>
@@ -318,7 +318,7 @@ const BillingPage = () => {
                   </div>
                 </div>
 
-                <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'flex', gap: '0.5rem', background: '#F8FAFC', padding: '0.75rem', borderRadius: 8, border: '1px solid var(--border)' }}>
+                <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'flex', gap: '0.5rem', background: 'var(--bg-secondary)', padding: '0.75rem', borderRadius: 8, border: '1px solid var(--border)' }}>
                   <ShieldCheck size={16} color="var(--primary)" style={{ flexShrink: 0 }} />
                   <span>This is a secure checkout simulation. Upgrading immediately provides Pro metrics capacity.</span>
                 </div>

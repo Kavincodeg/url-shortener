@@ -20,7 +20,7 @@ const PublicStatsPage = () => {
   }, [shortCode]);
 
   if (loading) return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#F8FAFC' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-secondary)' }}>
       <div style={{ textAlign: 'center' }}>
         <div style={{ width: 40, height: 40, border: '3px solid #EEF2FF', borderTop: '3px solid #4F46E5', borderRadius: '50%', animation: 'spin 0.8s linear infinite', margin: '0 auto 12px' }} />
         <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
@@ -29,7 +29,7 @@ const PublicStatsPage = () => {
   );
 
   if (error) return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#F8FAFC' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-secondary)' }}>
       <div style={{ textAlign: 'center' }}>
         <p style={{ color: 'var(--danger)', fontSize: '1rem' }}>{error}</p>
       </div>
@@ -39,9 +39,9 @@ const PublicStatsPage = () => {
   const total = stats.countryStats?.reduce((s, c) => s + c.value, 0) || 0;
 
   return (
-    <div style={{ minHeight: '100vh', background: '#F8FAFC' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--bg-secondary)' }}>
       {/* Navbar */}
-      <nav style={{ background: 'white', borderBottom: '1px solid var(--border)', padding: '0 1.5rem', height: 56, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <nav style={{ background: 'var(--bg-primary)', borderBottom: '1px solid var(--border)', padding: '0 1.5rem', height: 56, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           <div style={{ width: 28, height: 28, background: 'linear-gradient(135deg, #4F46E5, #7C3AED)', borderRadius: 7, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Zap size={14} color="white" />

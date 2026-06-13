@@ -97,7 +97,7 @@ const CreateLinkModal = ({ onClose, onCreated, editUrl }) => {
               Custom Alias <span style={{ color: 'var(--text-muted)', fontWeight: 400 }}>(optional)</span>
             </label>
             <div style={{ display: 'flex', alignItems: 'center', border: '1px solid var(--border)', borderRadius: 8, overflow: 'hidden', transition: 'all 0.15s', ...(aliasStatus === 'taken' ? { borderColor: 'var(--danger)' } : aliasStatus === 'available' ? { borderColor: 'var(--success)' } : {}) }}>
-              <span style={{ padding: '0 0.625rem 0 0.75rem', fontSize: '0.875rem', color: 'var(--text-muted)', background: '#F8FAFC', borderRight: '1px solid var(--border)', whiteSpace: 'nowrap', alignSelf: 'stretch', display: 'flex', alignItems: 'center' }}>
+              <span style={{ padding: '0 0.625rem 0 0.75rem', fontSize: '0.875rem', color: 'var(--text-muted)', background: 'var(--bg-secondary)', borderRight: '1px solid var(--border)', whiteSpace: 'nowrap', alignSelf: 'stretch', display: 'flex', alignItems: 'center' }}>
                 {window.location.hostname}/
               </span>
               <input
@@ -140,7 +140,7 @@ const CreateLinkModal = ({ onClose, onCreated, editUrl }) => {
           </div>
 
           {/* Generate QR toggle */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem', background: '#F8FAFC', borderRadius: 8 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem', background: 'var(--bg-secondary)', borderRadius: 8 }}>
             <label className="toggle">
               <input type="checkbox" checked={form.generateQR} onChange={(e) => setForm({ ...form, generateQR: e.target.checked })} />
               <span className="toggle-slider" />

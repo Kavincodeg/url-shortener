@@ -107,7 +107,7 @@ const OTPPage = () => {
   return (
     <div style={{
       minHeight: '100vh',
-      background: 'linear-gradient(135deg, #EEF2FF 0%, #F5F3FF 50%, #EFF6FF 100%)',
+      background: 'var(--bg-body)',
       display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem',
     }}>
       <div className="animate-fade-in" style={{ width: '100%', maxWidth: 420 }}>
@@ -115,7 +115,7 @@ const OTPPage = () => {
         {/* Logo */}
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
           <Link to="/" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none' }}>
-            <div style={{ width: 40, height: 40, background: 'linear-gradient(135deg, #4F46E5, #7C3AED)', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ width: 40, height: 40, background: 'linear-gradient(135deg, #2563EB, #7C3AED)', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <Zap size={20} color="white" />
             </div>
             <span style={{ fontWeight: 800, fontSize: '1.5rem', color: 'var(--text-primary)' }}>Linko</span>
@@ -128,9 +128,9 @@ const OTPPage = () => {
           <div style={{ textAlign: 'center', marginBottom: '1.75rem' }}>
             <div style={{
               width: 64, height: 64, margin: '0 auto 1rem',
-              background: 'linear-gradient(135deg, #EEF2FF, #E0E7FF)',
+              background: 'var(--primary-light)',
               borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
-              border: '2px solid #C7D2FE',
+              border: '2px solid var(--primary)',
             }}>
               <Mail size={28} color="#4F46E5" />
             </div>

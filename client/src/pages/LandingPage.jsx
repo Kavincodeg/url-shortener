@@ -17,12 +17,12 @@ const stats = [
 
 const LandingPage = () => {
   return (
-    <div style={{ minHeight: '100vh', background: 'white' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--bg-body)' }}>
       {/* Navbar */}
       <nav className="landing-nav">
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 1.5rem', height: 60, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none' }}>
-            <div style={{ width: 32, height: 32, background: 'linear-gradient(135deg, #4F46E5, #7C3AED)', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ width: 32, height: 32, background: 'linear-gradient(135deg, #2563EB, #7C3AED)', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <Zap size={16} color="white" />
             </div>
             <span style={{ fontWeight: 800, fontSize: '1.25rem', color: 'var(--text-primary)' }}>Linko</span>
@@ -49,7 +49,7 @@ const LandingPage = () => {
       <section className="hero-gradient" style={{ padding: '5rem 1.5rem' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem', alignItems: 'center' }}>
           <div className="animate-fade-in">
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.375rem', background: 'white', border: '1px solid var(--border)', borderRadius: 100, padding: '0.25rem 0.875rem 0.25rem 0.5rem', marginBottom: '1.5rem', fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 500, boxShadow: 'var(--card-shadow)' }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.375rem', background: 'var(--bg-primary)', border: '1px solid var(--border)', borderRadius: 100, padding: '0.25rem 0.875rem 0.25rem 0.5rem', marginBottom: '1.5rem', fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 500, boxShadow: 'var(--card-shadow)' }}>
               <span style={{ background: 'var(--primary)', color: 'white', borderRadius: 100, padding: '0.125rem 0.5rem', fontSize: '0.7rem', fontWeight: 700 }}>NEW</span>
               Fast · Secure · Reliable
             </div>
@@ -81,10 +81,10 @@ const LandingPage = () => {
 
           {/* Hero visual */}
           <div className="animate-float" style={{ position: 'relative' }}>
-            <div style={{ background: 'white', borderRadius: 16, padding: '1.5rem', boxShadow: '0 20px 60px rgba(79,70,229,0.12)', border: '1px solid var(--border)' }}>
+            <div style={{ background: 'var(--bg-primary)', borderRadius: 16, padding: '1.5rem', boxShadow: '0 20px 60px rgba(79,70,229,0.12)', border: '1px solid var(--border)' }}>
               <div style={{ marginBottom: '1rem' }}>
                 <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '0.375rem' }}>Short link created! 🎉</div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.625rem 0.875rem', background: '#F8FAFC', borderRadius: 8, border: '1px solid var(--border)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.625rem 0.875rem', background: 'var(--bg-secondary)', borderRadius: 8, border: '1px solid var(--border)' }}>
                   <Zap size={14} color="var(--primary)" />
                   <span style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--primary)' }}>linkly.io/awesome</span>
                 </div>
@@ -94,7 +94,7 @@ const LandingPage = () => {
                   { label: 'Total Clicks', value: '2,543', trend: '+18%', icon: TrendingUp },
                   { label: 'Countries', value: '48', trend: 'Global', icon: Globe },
                 ].map(({ label, value, trend, icon: Icon }) => (
-                  <div key={label} style={{ padding: '0.875rem', background: '#F8FAFC', borderRadius: 8, border: '1px solid var(--border)' }}>
+                  <div key={label} style={{ padding: '0.875rem', background: 'var(--bg-secondary)', borderRadius: 8, border: '1px solid var(--border)' }}>
                     <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', marginBottom: 4 }}>{label}</div>
                     <div style={{ fontSize: '1.375rem', fontWeight: 800, color: 'var(--text-primary)' }}>{value}</div>
                     <div style={{ fontSize: '0.7rem', color: 'var(--success)', fontWeight: 600 }}>{trend}</div>
@@ -102,9 +102,9 @@ const LandingPage = () => {
                 ))}
               </div>
               {/* Mini chart visual */}
-              <div style={{ height: 60, background: 'linear-gradient(135deg, #EEF2FF, #F5F3FF)', borderRadius: 8, display: 'flex', alignItems: 'flex-end', padding: '0 0.5rem 0.5rem', gap: 4 }}>
+              <div style={{ height: 60, background: 'var(--primary-light)', borderRadius: 8, display: 'flex', alignItems: 'flex-end', padding: '0 0.5rem 0.5rem', gap: 4 }}>
                 {[30, 50, 40, 70, 60, 90, 80].map((h, i) => (
-                  <div key={i} style={{ flex: 1, height: `${h}%`, background: 'linear-gradient(180deg, #4F46E5, #7C3AED)', borderRadius: '3px 3px 0 0', opacity: 0.8 + i * 0.03 }} />
+                  <div key={i} style={{ flex: 1, height: `${h}%`, background: 'linear-gradient(180deg, #2563EB, #7C3AED)', borderRadius: '3px 3px 0 0', opacity: 0.8 + i * 0.03 }} />
                 ))}
               </div>
             </div>
@@ -113,7 +113,7 @@ const LandingPage = () => {
       </section>
 
       {/* Stats bar */}
-      <section style={{ borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)', padding: '2rem 1.5rem', background: 'white' }}>
+      <section style={{ borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)', padding: '2rem 1.5rem', background: 'var(--bg-primary)' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '2rem', textAlign: 'center' }}>
           {stats.map(({ value, label }) => (
             <div key={label}>
@@ -148,7 +148,7 @@ const LandingPage = () => {
       </section>
 
       {/* CTA Section */}
-      <section style={{ padding: '5rem 1.5rem', background: 'linear-gradient(135deg, #4F46E5, #7C3AED)' }}>
+      <section style={{ padding: '5rem 1.5rem', background: 'linear-gradient(135deg, #2563EB, #7C3AED)' }}>
         <div style={{ maxWidth: 600, margin: '0 auto', textAlign: 'center' }}>
           <h2 style={{ fontSize: '2.25rem', fontWeight: 900, color: 'white', marginBottom: '1rem' }}>
             Ready to grow smarter?
@@ -157,7 +157,7 @@ const LandingPage = () => {
             Join thousands of creators, marketers and businesses using Linko.
           </p>
           <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
-            <Link to="/register" style={{ background: 'white', color: 'var(--primary)', padding: '0.75rem 2rem', borderRadius: 8, fontWeight: 700, fontSize: '0.9375rem', display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
+            <Link to="/register" style={{ background: 'var(--bg-primary)', color: 'var(--primary)', padding: '0.75rem 2rem', borderRadius: 8, fontWeight: 700, fontSize: '0.9375rem', display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
               Start for Free <ArrowRight size={16} />
             </Link>
           </div>
@@ -168,7 +168,7 @@ const LandingPage = () => {
       <footer style={{ borderTop: '1px solid var(--border)', padding: '2rem 1.5rem' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <div style={{ width: 24, height: 24, background: 'linear-gradient(135deg, #4F46E5, #7C3AED)', borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ width: 24, height: 24, background: 'linear-gradient(135deg, #2563EB, #7C3AED)', borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <Zap size={12} color="white" />
             </div>
             <span style={{ fontWeight: 700, color: 'var(--text-primary)' }}>Linko</span>

@@ -63,7 +63,7 @@ const QRModal = ({ url, onClose }) => {
 
           {/* QR Code image */}
           <div style={{
-            display: 'inline-flex', padding: '1rem', background: 'white',
+            display: 'inline-flex', padding: '1rem', background: 'var(--bg-primary)',
             border: '1px solid var(--border)', borderRadius: 12,
             boxShadow: '0 4px 12px rgba(0,0,0,0.06)', marginBottom: '1.5rem',
             width: 232, height: 232, alignItems: 'center', justifyContent: 'center'
@@ -72,7 +72,7 @@ const QRModal = ({ url, onClose }) => {
           </div>
 
           {/* Short URL display */}
-          <div style={{ background: '#F8FAFC', borderRadius: 8, padding: '0.625rem 1rem', marginBottom: '1.25rem', fontSize: '0.875rem', color: 'var(--primary)', fontWeight: 600 }}>
+          <div style={{ background: 'var(--bg-secondary)', borderRadius: 8, padding: '0.625rem 1rem', marginBottom: '1.25rem', fontSize: '0.875rem', color: 'var(--primary)', fontWeight: 600 }}>
             {formatShortUrl(shortUrl)}
           </div>
 
