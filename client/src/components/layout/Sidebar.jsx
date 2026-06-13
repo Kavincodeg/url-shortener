@@ -1,9 +1,8 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import Logo from '../Logo';
 import {
   LayoutDashboard, Link2, BarChart3, QrCode, Upload,
-  Settings, CreditCard, User, LogOut
+  Settings, CreditCard, User, LogOut, Zap
 } from 'lucide-react';
 
 const navItems = [
@@ -29,9 +28,15 @@ const Sidebar = () => {
   return (
     <aside className="sidebar">
       {/* Logo */}
-      <div style={{ padding: '1rem', borderBottom: '1px solid var(--border)' }}>
-        <NavLink to="/dashboard" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
-          <Logo height={30} />
+      <div style={{ padding: '1.25rem 1rem 1rem', borderBottom: '1px solid var(--border)' }}>
+        <NavLink to="/dashboard" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none' }}>
+          <div style={{
+            width: 32, height: 32, background: 'linear-gradient(135deg, #2563EB, #7C3AED)',
+            borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center'
+          }}>
+            <Zap size={16} color="white" />
+          </div>
+          <span style={{ fontWeight: 700, fontSize: '1.125rem', color: 'var(--text-primary)' }}>Linko</span>
         </NavLink>
       </div>
 
