@@ -1,599 +1,524 @@
-# 🔗 Linko – URL Shortener with Analytics
+# 🔗 Linko – URL Shortener & Analytics Platform
 
-### Shorten. Track. Analyze.
+> **Shorten. Track. Analyze.**
 
-Linko is a modern full-stack URL Shortener and Analytics platform built with **React, Node.js, Express, and MongoDB**. It allows users to create branded short links, track engagement through real-time analytics, generate QR codes, manage custom aliases, monitor visitor behavior, and gain valuable insights through a clean SaaS-style dashboard.
-
----
-
-## 📸 Project Preview
-
-### Core Modules
-
-- Authentication & Authorization
-- URL Shortening
-- Custom Aliases
-- QR Code Generation
-- Click Analytics
-- Visit History Tracking
-- Device & Browser Analytics
-- Location Analytics
-- Public Statistics Page
-- Expiry Links
-- Bulk URL Shortening
-- Modern SaaS Dashboard
+Linko is a modern, full-stack URL Shortener and Analytics platform built with **React, Node.js, Express, and MongoDB**. It allows users to create branded short links, track engagement through real-time analytics, generate QR codes, manage custom aliases, monitor visitor behaviour, and gain valuable insights through a clean SaaS-style dashboard.
 
 ---
 
-## 🚀 Features
+## 📺 Demo Video
 
-### 🔐 Authentication & Authorization
+▶️ **[Watch the full demo on Loom](https://www.loom.com/share/c77a71d1667a45e0b36fc8f64c91fc1e)**
 
-- User Registration
-- User Login
-- JWT Authentication
-- Password Hashing using bcrypt
-- Protected Routes
-- Ownership-Based Access Control
-- Profile Management
-
-Users can only access and manage their own shortened URLs and analytics.
+> A complete walkthrough of all features: authentication, URL shortening, analytics, QR codes, bulk upload, and more.
 
 ---
 
-### 🔗 URL Shortening
+## 📸 Features Overview
 
-Convert long URLs into short and shareable links.
-
-#### Example
-
-Input:
-
-```text
-https://www.example.com/my-very-long-url
-```
-
-Output:
-
-```text
-https://linko.io/abc123
-```
-
-Features:
-
-- URL Validation
-- Unique Short Code Generation
-- Instant URL Creation
-- Copy to Clipboard
-- Share Functionality
+| Feature | Description |
+|---|---|
+| 🔐 Authentication | Email/Password + Google OAuth + OTP Verification |
+| 🔗 URL Shortening | Convert long URLs into short, shareable links |
+| 🎯 Custom Aliases | Branded links like `linko.io/my-portfolio` |
+| ⏰ Expiry Links | Set expiration dates for any link |
+| 📱 QR Code Generation | Download QR codes as PNG or SVG |
+| 📊 Analytics Dashboard | Clicks, devices, browsers, countries, referrers |
+| 📜 Visit History | Per-click tracking with full metadata |
+| 🌎 Public Stats Page | Shareable analytics page (no login required) |
+| 📂 Bulk URL Shortening | Upload CSV and batch-shorten hundreds of URLs |
+| 👤 Profile Management | Update name, email, password, timezone |
 
 ---
 
-### 🎯 Custom Alias
+## 🚀 Setup Instructions
 
-Create branded links such as:
+### Prerequisites
 
-```text
-https://linko.io/my-portfolio
-```
+Before you begin, ensure you have the following installed:
 
-instead of
-
-```text
-https://linko.io/abc123
-```
-
-Features:
-
-- Custom Alias Validation
-- Duplicate Alias Prevention
-- SEO-Friendly Links
+- **Node.js** ≥ 18 — [Download](https://nodejs.org/)
+- **npm** ≥ 9 (comes with Node.js)
+- **MongoDB Atlas account** — [Sign up free](https://www.mongodb.com/atlas)
+- **Google Cloud Console project** (for OAuth) — [Create one](https://console.cloud.google.com/)
+- **Gmail account** (for OTP emails via App Password)
 
 ---
 
-### ⏰ Expiry Links
-
-Set expiration dates for links.
-
-Examples:
-
-- 24 Hours
-- 7 Days
-- Custom Expiry Date
-
-Expired links:
-
-- Automatically become inactive
-- Display Expired Status
-- Stop redirecting visitors
-
----
-
-### 📱 QR Code Generation
-
-Generate QR codes for every shortened URL.
-
-Features:
-
-- QR Code Preview
-- Download PNG
-- Download SVG
-- Mobile-Friendly Sharing
-
----
-
-### 📊 Analytics Dashboard
-
-Gain valuable insights into link performance.
-
-#### KPI Metrics
-
-- Total Clicks
-- Unique Clicks
-- Last Click
-- Average Daily Clicks
-
-#### Interactive Charts
-
-- Daily Click Trends
-- Weekly Performance
-- Monthly Growth
-
-#### Analytics Breakdown
-
-- Device Analytics
-- Browser Analytics
-- Country Analytics
-- City Analytics
-- Referrer Analytics
-
----
-
-### 📜 Visit History Tracking
-
-Every click is stored and analyzed.
-
-Tracked Data:
-
-- Timestamp
-- Country
-- City
-- Browser
-- Operating System
-- Device Type
-- Referrer
-- IP Address
-
----
-
-### 🌎 Public Statistics Page
-
-Share analytics publicly.
-
-Example:
-
-```text
-https://linko.io/stats/abc123
-```
-
-Displays:
-
-- Total Clicks
-- Unique Clicks
-- Last Click
-- Click Trends
-- Top Countries
-
-No login required.
-
----
-
-### 📂 Bulk URL Shortening
-
-Upload multiple URLs using CSV files.
-
-Features:
-
-- CSV Upload
-- Batch Processing
-- Bulk URL Creation
-- Export Results
-
-Supported Format:
-
-```csv
-https://google.com
-https://github.com
-https://linkedin.com
-```
-
----
-
-### 👤 Profile Management
-
-Manage account settings.
-
-Features:
-
-- Update Name
-- Update Email
-- Change Password
-- Profile Settings
-- Timezone Settings
-
----
-
-### 🔔 Notification System
-
-Real-time toast notifications.
-
-#### Success Notifications
-
-- Link Created Successfully
-- URL Updated
-- URL Deleted
-- Link Copied
-
-#### Error Notifications
-
-- Invalid URL
-- Duplicate Alias
-- Expired Link
-- Upload Failed
-
----
-
-### 📭 Empty States
-
-Dedicated UI for empty content.
-
-Examples:
-
-- No Links Found
-- No Analytics Available
-- No Search Results
-
-Actions:
-
-- Create New Link
-- Import CSV
-
----
-
-## 🎨 Modern SaaS UI
-
-Inspired by:
-
-- Stripe
-- Vercel
-- Linear
-- Notion
-
-Design Highlights:
-
-- Clean Light Theme
-- Responsive Layout
-- Accessible Components
-- Minimal Dashboard Design
-- Mobile-Friendly Experience
-- Loading States
-- Empty States
-- Success/Error States
-
----
-
-# 🏗️ System Architecture
-
-## Frontend
-
-Built using:
-
-- React.js
-- React Router DOM
-- Tailwind CSS
-- Shadcn UI
-- Axios
-- React Hook Form
-- Recharts
-- Lucide React
-
----
-
-## Backend
-
-Built using:
-
-- Node.js
-- Express.js
-- JWT
-- bcrypt
-- Express Validator
-
----
-
-## Database
-
-- MongoDB Atlas
-- Mongoose ODM
-
----
-
-## Additional Tools
-
-- QRCode
-- UA Parser JS
-- GeoIP
-- Multer
-- CSV Parser
-- Helmet
-- CORS
-- Morgan
-
----
-
-# 📂 Project Structure
+### 1. Clone the Repository
 
 ```bash
-linko/
+git clone https://github.com/Kavincodeg/url-shortener.git
+cd url-shortener
+```
+
+---
+
+### 2. Set Up the Backend (Server)
+
+```bash
+cd server
+npm install
+```
+
+#### Create your `.env` file
+
+Copy the example file and fill in your credentials:
+
+```bash
+cp .env.example .env
+```
+
+Open `server/.env` and configure the following variables:
+
+```env
+# Server
+PORT=5000
+NODE_ENV=development
+
+# MongoDB Atlas
+MONGO_URI=mongodb+srv://<username>:<password>@<cluster>.mongodb.net/<dbname>?retryWrites=true&appName=url
+
+# JWT
+JWT_SECRET=your_super_secret_jwt_key_here
+JWT_EXPIRE=7d
+
+# URLs
+BASE_URL=http://localhost:5000
+CLIENT_URL=http://localhost:5173
+
+# Google OAuth
+GOOGLE_CLIENT_ID=your_google_client_id_here
+GOOGLE_CLIENT_SECRET=your_google_client_secret_here
+GOOGLE_REDIRECT_URI=http://localhost:5000/api/auth/google/callback
+
+# Email OTP (Gmail SMTP)
+GMAIL_USER=your.email@gmail.com
+GMAIL_APP_PASSWORD=xxxx xxxx xxxx xxxx
+
+# Optional: Brevo / Resend / SendGrid (HTTP-based email API)
+# BREVO_API_KEY=your_brevo_api_key_here
+# RESEND_API_KEY=your_resend_api_key_here
+```
+
+> **How to get a Gmail App Password:**
+> Go to [myaccount.google.com/apppasswords](https://myaccount.google.com/apppasswords), create an app password for "Mail", and paste the 16-character code as `GMAIL_APP_PASSWORD`.
+
+#### Start the backend server
+
+```bash
+# Development (with hot reload)
+npm run dev
+
+# Production
+npm start
+```
+
+The server will start at: **http://localhost:5000**
+
+---
+
+### 3. Set Up the Frontend (Client)
+
+Open a new terminal:
+
+```bash
+cd client
+npm install
+```
+
+#### Configure environment (optional for local dev)
+
+The client is pre-configured to point to `http://localhost:5000` in development. No `.env` changes are needed unless your server runs on a different port.
+
+For production, update `client/.env.production`:
+
+```env
+VITE_API_URL=https://your-backend-domain.com
+```
+
+#### Start the frontend dev server
+
+```bash
+npm run dev
+```
+
+The app will be available at: **http://localhost:5173**
+
+---
+
+### 4. Google OAuth Setup
+
+1. Go to [Google Cloud Console](https://console.cloud.google.com/) → **APIs & Services** → **Credentials**
+2. Create an **OAuth 2.0 Client ID** (Web application)
+3. Add Authorized redirect URI: `http://localhost:5000/api/auth/google/callback`
+4. Copy **Client ID** and **Client Secret** into your `server/.env`
+
+---
+
+### 5. MongoDB Atlas Setup
+
+1. Create a free cluster at [mongodb.com/atlas](https://www.mongodb.com/atlas)
+2. Add a database user and whitelist your IP (or allow all: `0.0.0.0/0`)
+3. Copy the connection string into `MONGO_URI` in `server/.env`
+4. The database and collections are created automatically on first run
+
+---
+
+### 6. Verify Everything Works
+
+Open your browser and navigate to:
+
+- Frontend: [http://localhost:5173](http://localhost:5173) — You should see the Linko landing page
+- Backend health check: [http://localhost:5000/api/health](http://localhost:5000/api/health) — Should return `{ "success": true }`
+
+---
+
+## 🌐 Deployment
+
+| Layer | Recommended Platform |
+|---|---|
+| Frontend | Vercel / Netlify |
+| Backend | Render / Railway / Fly.io |
+| Database | MongoDB Atlas |
+
+### Deploy Frontend to Vercel
+
+```bash
+cd client
+npm run build
+# Push to GitHub, then connect repo to Vercel
+```
+
+### Deploy Backend to Render
+
+Use the included `render.yaml` at the project root for one-click deployment.
+Set all environment variables from `server/.env.example` in the Render dashboard.
+
+---
+
+## 🧠 AI Planning Document
+
+### Problem Statement
+
+Users need a simple, reliable way to shorten long URLs, share them, and understand how those links are being used — without being dependent on proprietary platforms like bit.ly that have usage limits or paywalls for analytics.
+
+### Planning Approach
+
+The application was planned with an AI-assisted approach using the following process:
+
+1. **Requirements Decomposition** — Broke down the hackathon prompt into atomic features: shorten, authenticate, track, analyse, bulk process.
+2. **Schema Design First** — Defined MongoDB schemas before writing any controller logic to avoid rework.
+3. **API Contract Definition** — Planned all REST endpoints and their request/response shapes before implementation.
+4. **Progressive Enhancement** — Started with core shortening + redirect, then layered in auth, analytics, QR, and bulk upload.
+5. **Security-First Middleware** — Rate limiting, Helmet, CORS, and input validation were planned as cross-cutting concerns, not afterthoughts.
+
+### Key Design Decisions
+
+| Decision | Rationale |
+|---|---|
+| MongoDB over SQL | Flexible document model suits visit-log writes at scale |
+| nanoid for short codes | Collision-resistant, URL-safe, and compact |
+| JWT + Passport sessions | JWT for API auth; Passport session for OAuth callback flow |
+| GeoIP-lite (offline) | No external API call per redirect; fast lookup from bundled DB |
+| Soft deletes (`isDeleted`) | Preserve analytics data even after a user deletes a link |
+| Custom alias as sparse index | Prevents duplicate aliases while allowing multiple null values |
+
+---
+
+## 🏗️ Architecture Diagram
+
+![Linko Architecture Diagram](./architecture.png)
+
+| Layer | Technology | Role |
+|---|---|---|
+| **Client** | React + Vite | SPA served from Vercel/Netlify |
+| **Transport** | HTTPS REST API | JSON over HTTP between client and server |
+| **Server** | Node.js + Express | API routes, auth, redirect logic |
+| **Database** | MongoDB Atlas | Stores Users, URLs, Visits, OTPs |
+| **Auth** | Passport.js + JWT | Local + Google OAuth 2.0 |
+| **Email** | Gmail SMTP / Brevo | OTP delivery |
+| **Geo / UA** | GeoIP-lite + UA-Parser | Location & device analytics |
+
+### Data Flow: URL Redirect
+
+1. User clicks a short link (e.g. `linko.io/abc123`)
+2. Express receives `GET /:shortCode`
+3. **Rate limiter** checks request frequency
+4. MongoDB lookup by `shortCode` or `customAlias`
+5. **Expiry check** — if expired, return `410 Gone`
+6. **UA-Parser** extracts device, browser, OS from User-Agent header
+7. **GeoIP-lite** resolves IP address to country and city
+8. Visit document written to MongoDB (async, non-blocking)
+9. `totalClicks` counter incremented (async)
+10. Server returns **HTTP 302** → redirects user to `originalUrl`
+
+---
+
+## 📂 Project Structure
+
+```
+url-shortener/
 │
-├── client/
+├── client/                        # React + Vite frontend
 │   ├── src/
-│   │   ├── assets/
-│   │   ├── pages/
-│   │   ├── components/
-│   │   ├── layouts/
-│   │   ├── hooks/
-│   │   ├── services/
-│   │   ├── context/
-│   │   ├── routes/
-│   │   └── utils/
+│   │   ├── pages/                 # Route-level page components
+│   │   │   ├── LandingPage.jsx
+│   │   │   ├── LoginPage.jsx
+│   │   │   ├── RegisterPage.jsx
+│   │   │   ├── OTPPage.jsx
+│   │   │   ├── DashboardPage.jsx
+│   │   │   ├── MyLinksPage.jsx
+│   │   │   ├── AnalyticsPage.jsx
+│   │   │   ├── AnalyticsOverviewPage.jsx
+│   │   │   ├── VisitHistoryPage.jsx
+│   │   │   ├── QRCodesPage.jsx
+│   │   │   ├── BulkPage.jsx
+│   │   │   ├── ProfilePage.jsx
+│   │   │   ├── PublicStatsPage.jsx
+│   │   │   └── BillingPage.jsx
+│   │   ├── components/            # Reusable UI components
+│   │   ├── context/               # AuthContext, ThemeContext
+│   │   ├── lib/                   # Utility helpers (urlHelper.js)
+│   │   └── App.jsx                # Root routing
+│   ├── index.html
+│   └── vite.config.js
 │
-├── server/
-│   ├── config/
-│   ├── controllers/
-│   ├── middleware/
-│   ├── models/
-│   ├── routes/
-│   ├── services/
-│   ├── utils/
-│   └── validators/
+├── server/                        # Node.js + Express backend
+│   └── src/
+│       ├── config/                # DB connection, Passport config
+│       ├── controllers/           # Business logic
+│       │   ├── authController.js
+│       │   ├── urlController.js
+│       │   ├── analyticsController.js
+│       │   ├── bulkController.js
+│       │   └── redirectController.js
+│       ├── middleware/            # Auth, rate limiter, error handler
+│       ├── models/                # Mongoose schemas
+│       │   ├── User.js
+│       │   ├── Url.js
+│       │   ├── Visit.js
+│       │   └── OTP.js
+│       ├── routes/                # Express route definitions
+│       ├── services/              # Email service abstraction
+│       ├── utils/                 # nanoid, QR code helpers
+│       └── index.js               # App entry point
 │
-├── README.md
-└── package.json
+├── render.yaml                    # Render.com deployment config
+├── .gitignore
+└── README.md
 ```
 
 ---
 
-# 🗄️ Database Schema
+## 🗄️ Database Schema
 
-## Users Collection
+### Users Collection
 
 ```javascript
 {
-  _id,
-  name,
-  email,
-  password,
-  createdAt,
-  updatedAt
+  _id: ObjectId,
+  name: String,
+  email: String (unique),
+  password: String (hashed, bcrypt),
+  provider: String,        // 'local' | 'google'
+  googleId: String,
+  avatar: String,
+  timezone: String,
+  isVerified: Boolean,
+  createdAt: Date,
+  updatedAt: Date
+}
+```
+
+### URLs Collection
+
+```javascript
+{
+  _id: ObjectId,
+  userId: ObjectId (ref: User),
+  originalUrl: String,
+  shortCode: String (unique),
+  customAlias: String (unique, sparse),
+  totalClicks: Number,
+  expiresAt: Date | null,
+  password: String | null,
+  qrCode: String (base64),
+  isDeleted: Boolean,       // Soft delete
+  createdAt: Date,
+  updatedAt: Date
+}
+```
+
+### Visits Collection
+
+```javascript
+{
+  _id: ObjectId,
+  urlId: ObjectId (ref: Url),
+  timestamp: Date,
+  ip: String,
+  browser: String,
+  os: String,
+  device: String,
+  country: String,
+  city: String,
+  referrer: String
+}
+```
+
+### OTP Collection
+
+```javascript
+{
+  _id: ObjectId,
+  email: String,
+  otp: String (hashed),
+  expiresAt: Date,
+  createdAt: Date
 }
 ```
 
 ---
 
-## URLs Collection
+## 🔌 REST API Reference
 
-```javascript
-{
-  _id,
-  userId,
-  originalUrl,
-  shortCode,
-  customAlias,
-  totalClicks,
-  expiresAt,
-  qrCode,
-  createdAt,
-  updatedAt
-}
-```
+### Authentication — `/api/auth`
 
----
+| Method | Endpoint | Description | Auth Required |
+|---|---|---|---|
+| POST | `/register` | Register new user | No |
+| POST | `/login` | Login with email/password | No |
+| POST | `/send-otp` | Send OTP to email | No |
+| POST | `/verify-otp` | Verify OTP code | No |
+| GET | `/me` | Get current user profile | Yes |
+| PUT | `/me` | Update profile | Yes |
+| PUT | `/me/password` | Change password | Yes |
+| GET | `/google` | Initiate Google OAuth | No |
+| GET | `/google/callback` | Google OAuth callback | No |
+| POST | `/logout` | Logout | Yes |
 
-## Visits Collection
+### URLs — `/api/urls`
 
-```javascript
-{
-  _id,
-  urlId,
-  timestamp,
-  ip,
-  browser,
-  os,
-  device,
-  country,
-  city,
-  referrer
-}
-```
+| Method | Endpoint | Description | Auth Required |
+|---|---|---|---|
+| POST | `/` | Create short URL | Yes |
+| GET | `/` | List user's URLs | Yes |
+| GET | `/:id` | Get single URL | Yes |
+| PUT | `/:id` | Update URL | Yes |
+| DELETE | `/:id` | Soft-delete URL | Yes |
 
----
+### Analytics — `/api/analytics`
 
-# 🔌 REST API Endpoints
+| Method | Endpoint | Description | Auth Required |
+|---|---|---|---|
+| GET | `/:id` | Get analytics for a URL | Yes |
+| GET | `/:id/visits` | Paginated visit history | Yes |
+| GET | `/public/:shortCode` | Public stats | No |
 
-## Authentication
+### Bulk — `/api/bulk`
 
-```http
-POST /api/auth/register
-POST /api/auth/login
-GET  /api/auth/me
-```
+| Method | Endpoint | Description | Auth Required |
+|---|---|---|---|
+| POST | `/` | Upload CSV and bulk-shorten | Yes |
 
----
+### Redirect
 
-## URLs
-
-```http
-POST   /api/urls
-GET    /api/urls
-PUT    /api/urls/:id
-DELETE /api/urls/:id
-```
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/:shortCode` | Redirect to original URL |
 
 ---
 
-## Analytics
+## ⚙️ Assumptions Made
 
-```http
-GET /api/analytics/:id
-GET /api/analytics/:id/visits
-```
-
----
-
-## Redirect
-
-```http
-GET /:shortCode
-```
+1. **Single-tenant by default** — Each user owns their own links; no team/org sharing is implemented.
+2. **No payment processing** — The Billing page is a UI placeholder; no real payment gateway is integrated.
+3. **GeoIP accuracy** — Location data uses the bundled `geoip-lite` database, which is accurate to country/city level but may lag behind real-time changes.
+4. **Short code collisions are negligible** — `nanoid` with 8 characters gives ~281 trillion combinations; collision probability is effectively zero at small scale.
+5. **CSV bulk upload format** — One URL per line, no header row required. The system skips invalid/empty lines gracefully.
+6. **OTP expiry is 10 minutes** — Standard security window; users should request a new OTP if it expires.
+7. **Email deliverability** — Gmail SMTP may have sending limits in production; Brevo/Resend is the recommended alternative for higher volume.
+8. **Short codes and aliases are case-insensitive** — All aliases are stored and matched in lowercase.
+9. **Soft deletes preserve analytics** — Deleted links are flagged `isDeleted: true` but visits remain queryable for data integrity.
+10. **The `BASE_URL` env var controls the redirect domain** — In production, this should be your custom domain (e.g., `https://linko.io`).
 
 ---
 
-## Public Stats
+## 🔒 Security Features
 
-```http
-GET /stats/:shortCode
-```
-
----
-
-## Bulk Upload
-
-```http
-POST /api/bulk
-```
-
----
-
-# 🔒 Security Features
-
-- JWT Authentication
-- Password Hashing (bcrypt)
-- Protected Routes
-- Ownership Authorization
-- Input Validation
-- URL Validation
-- Rate Limiting
-- Helmet Security
-- CORS Protection
-- Request Logging
-- Centralized Error Handling
+- ✅ JWT-based stateless authentication
+- ✅ Password hashing with bcrypt (10 rounds)
+- ✅ Google OAuth 2.0 via Passport.js
+- ✅ OTP verification for email sign-up
+- ✅ Express rate limiting (general + redirect-specific)
+- ✅ Helmet.js security headers
+- ✅ CORS restricted to configured client origin
+- ✅ Input validation via express-validator
+- ✅ Ownership-based authorization (users can only modify their own links)
+- ✅ Soft deletes — no hard data loss
+- ✅ Centralized error handling middleware
 
 ---
 
-# 📈 Analytics Features
-
-### Traffic Analytics
-
-- Total Clicks
-- Unique Clicks
-- Daily Click Trends
-
-### Visitor Analytics
-
-- Device Tracking
-- Browser Tracking
-- Country Tracking
-- City Tracking
-
-### Source Analytics
-
-- Referrer Tracking
-- Direct Traffic Tracking
-
-### Historical Analytics
-
-- Visit History
-- Recent Visits
-- Last Visited Timestamp
-
----
-
-# 🚀 Deployment
+## 🌟 Tech Stack
 
 ### Frontend
-
-- Vercel
-- Netlify
+| Technology | Version | Purpose |
+|---|---|---|
+| React.js | 18.x | UI framework |
+| Vite | 5.x | Build tool & dev server |
+| React Router DOM | 6.x | Client-side routing |
+| Tailwind CSS | 3.x | Utility-first styling |
+| Axios | 1.x | HTTP client |
+| Recharts | 2.x | Analytics charts |
+| Lucide React | 0.469 | Icon library |
+| React Hot Toast | 2.x | Toast notifications |
+| React Dropzone | 14.x | CSV file uploads |
 
 ### Backend
-
-- Railway
-- Render
-- Fly.io
-
-### Database
-
-- MongoDB Atlas
-
----
-
-# 🌟 Key Highlights
-
-✅ JWT Authentication
-
-✅ Password Hashing
-
-✅ URL Validation
-
-✅ Unique Short Codes
-
-✅ Custom Aliases
-
-✅ QR Code Generation
-
-✅ Analytics Dashboard
-
-✅ Device Analytics
-
-✅ Browser Analytics
-
-✅ Location Analytics
-
-✅ Visit History
-
-✅ Public Statistics
-
-✅ Bulk URL Shortening
-
-✅ Expiry Links
-
-✅ Responsive Design
-
-✅ Modern SaaS UI
-
-✅ Protected Routes
+| Technology | Version | Purpose |
+|---|---|---|
+| Node.js | ≥ 18 | Runtime |
+| Express.js | 5.x | Web framework |
+| MongoDB | Atlas | Database |
+| Mongoose | 9.x | ODM |
+| JWT | 9.x | Authentication tokens |
+| bcryptjs | 3.x | Password hashing |
+| Passport.js | 0.7 | OAuth strategy |
+| nanoid | 3.x | Short code generation |
+| qrcode | 1.x | QR code generation |
+| geoip-lite | 2.x | IP geolocation |
+| ua-parser-js | 2.x | User-agent parsing |
+| Helmet | 8.x | Security headers |
+| express-rate-limit | 8.x | Rate limiting |
+| nodemailer | 8.x | Email delivery |
+| multer | 2.x | File upload handling |
+| csv-parser | 3.x | CSV processing |
 
 ---
 
-# 🔮 Future Enhancements
+## 🔮 Future Enhancements
 
-- Team Collaboration
-- Custom Domains
-- UTM Builder
-- Campaign Tracking
-- AI-Powered Insights
-- Scheduled Reports
-- Email Analytics Reports
-- Advanced Marketing Dashboard
-- Webhook Integrations
+- 🔲 Team Collaboration & Workspaces
+- 🔲 Custom Domain Support
+- 🔲 UTM Parameter Builder
+- 🔲 Campaign Tracking
+- 🔲 AI-Powered Link Insights
+- 🔲 Scheduled Email Reports
+- 🔲 Webhook Integrations
+- 🔲 Link A/B Testing
+- 🔲 Advanced Marketing Dashboard
+- 🔲 Mobile App (React Native)
 
 ---
 
-# 👨‍💻 Author
+## 👨‍💻 Author
 
-Built as a modern SaaS-grade URL management and analytics platform.
+Built as a modern SaaS-grade URL management and analytics platform for the Katomaran Hackathon.
 
-### 🔗 Linko
+**Linko** — *Shorten. Track. Analyze.*
 
-**Shorten. Track. Analyze.**
+---
+
+> This project is a part of a hackathon run by https://katomaran.com
