@@ -72,6 +72,33 @@ const sendViaSendGrid = async (toEmail, subject, html) => {
 };
 
 /**
+ * Send email via Brevo HTTP API (uses port 443, not blocked)
+ */
+const sendViaBrevo = async (toEmail, subject, html) => {
+  const fromEmail = process.env.EMAIL_FROM_EMAIL || process.env.GMAIL_USER || 'kvs684976@gmail.com';
+  const fromName = process.env.EMAIL_FROM_NAME || 'Linko';
+  const response = await fetch('https://api.brevo.com/v3/smtp/email', {
+    method: 'POST',
+    headers: {
+      'api-key': process.env.BREVO_API_KEY,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      sender: { name: fromName, email: fromEmail },
+      to: [{ email: toEmail }],
+      subject: subject,
+      htmlContent: html,
+    }),
+  });
+
+  if (!response.ok) {
+    const data = await response.json();
+    throw new Error(data.message || `Brevo error: ${response.statusText}`);
+  }
+};
+
+
+/**
  * Send a 6-digit OTP to the given email address.
  * @param {string} toEmail  - Recipient email
  * @param {string} otp      - 6-digit OTP string
@@ -146,7 +173,10 @@ const sendOTPEmail = async (toEmail, otp, name = 'there') => {
       </html>
     `;
 
-  if (process.env.RESEND_API_KEY) {
+  if (process.env.BREVO_API_KEY) {
+    console.log('Sending OTP email via Brevo...');
+    await sendViaBrevo(toEmail, subject, html);
+  } else if (process.env.RESEND_API_KEY) {
     console.log('Sending OTP email via Resend...');
     await sendViaResend(toEmail, subject, html);
   } else if (process.env.SENDGRID_API_KEY) {
