@@ -14,6 +14,7 @@ import OAuthSuccessPage from './pages/OAuthSuccessPage';
 // Protected pages
 import DashboardPage from './pages/DashboardPage';
 import MyLinksPage from './pages/MyLinksPage';
+import AnalyticsOverviewPage from './pages/AnalyticsOverviewPage';
 import AnalyticsPage from './pages/AnalyticsPage';
 import VisitHistoryPage from './pages/VisitHistoryPage';
 import BulkPage from './pages/BulkPage';
@@ -37,7 +38,7 @@ const App = () => {
           {/* Protected routes */}
           <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
           <Route path="/links" element={<ProtectedRoute><MyLinksPage /></ProtectedRoute>} />
-          <Route path="/analytics" element={<Navigate to="/links" replace />} />
+          <Route path="/analytics" element={<ProtectedRoute><AnalyticsOverviewPage /></ProtectedRoute>} />
           <Route path="/analytics/:id" element={<ProtectedRoute><AnalyticsPage /></ProtectedRoute>} />
           <Route path="/analytics/:id/visits" element={<ProtectedRoute><VisitHistoryPage /></ProtectedRoute>} />
           <Route path="/qr-codes" element={<ProtectedRoute><QRCodesPage /></ProtectedRoute>} />
