@@ -1,5 +1,6 @@
 const nodemailer = require('nodemailer');
 
+// Keep nodemailer transporter for local fallback
 const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
   port: 465,
@@ -14,17 +15,71 @@ const transporter = nodemailer.createTransport({
 });
 
 /**
+ * Send email via Resend HTTP API (uses port 443, not blocked)
+ */
+const sendViaResend = async (toEmail, subject, html) => {
+  const from = process.env.EMAIL_FROM || 'Linko <onboarding@resend.dev>';
+  const response = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      from,
+      to: toEmail,
+      subject,
+      html,
+    }),
+  });
+
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.message || `Resend error: ${response.statusText}`);
+  }
+  return data;
+};
+
+/**
+ * Send email via SendGrid HTTP API (uses port 443, not blocked)
+ */
+const sendViaSendGrid = async (toEmail, subject, html) => {
+  const fromEmail = process.env.EMAIL_FROM_EMAIL || process.env.GMAIL_USER || 'no-reply@linko.dev';
+  const fromName = process.env.EMAIL_FROM_NAME || 'Linko';
+  const response = await fetch('https://api.sendgrid.com/v3/mail/send', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${process.env.SENDGRID_API_KEY}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      personalizations: [{ to: [{ email: toEmail }] }],
+      from: { email: fromEmail, name: fromName },
+      content: [{ type: 'text/html', value: html }],
+    }),
+  });
+
+  if (!response.ok) {
+    let errMsg = `SendGrid error: ${response.statusText}`;
+    try {
+      const data = await response.json();
+      if (data.errors && data.errors[0]) {
+        errMsg = data.errors[0].message;
+      }
+    } catch (e) {}
+    throw new Error(errMsg);
+  }
+};
+
+/**
  * Send a 6-digit OTP to the given email address.
  * @param {string} toEmail  - Recipient email
  * @param {string} otp      - 6-digit OTP string
  * @param {string} name     - Recipient name (for personalisation)
  */
 const sendOTPEmail = async (toEmail, otp, name = 'there') => {
-  const mailOptions = {
-    from: `"Linko" <${process.env.GMAIL_USER}>`,
-    to: toEmail,
-    subject: `${otp} is your Linko verification code`,
-    html: `
+  const subject = `${otp} is your Linko verification code`;
+  const html = `
       <!DOCTYPE html>
       <html>
         <head>
@@ -89,10 +144,24 @@ const sendOTPEmail = async (toEmail, otp, name = 'there') => {
           </table>
         </body>
       </html>
-    `,
-  };
+    `;
 
-  await transporter.sendMail(mailOptions);
+  if (process.env.RESEND_API_KEY) {
+    console.log('Sending OTP email via Resend...');
+    await sendViaResend(toEmail, subject, html);
+  } else if (process.env.SENDGRID_API_KEY) {
+    console.log('Sending OTP email via SendGrid...');
+    await sendViaSendGrid(toEmail, subject, html);
+  } else {
+    console.log('Sending OTP email via SMTP/Nodemailer...');
+    const mailOptions = {
+      from: `"Linko" <${process.env.GMAIL_USER}>`,
+      to: toEmail,
+      subject,
+      html,
+    };
+    await transporter.sendMail(mailOptions);
+  }
 };
 
 module.exports = { sendOTPEmail };
