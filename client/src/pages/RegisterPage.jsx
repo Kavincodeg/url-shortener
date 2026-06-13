@@ -69,7 +69,7 @@ const RegisterPage = () => {
           <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '0.875rem' }}>
             <div>
               <label style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 600, marginBottom: '0.375rem' }}>Full name</label>
-              <input className="input-field" placeholder="John Doe" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required />
+              <input className="input-field" placeholder="vsk" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required />
             </div>
 
             <div>

@@ -275,7 +275,7 @@ const BillingPage = () => {
                   <label style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 600, marginBottom: '0.375rem' }}>Cardholder Name</label>
                   <input 
                     className="input-field" 
-                    placeholder="John Doe" 
+                    placeholder="vsk" 
                     required 
                     value={cardForm.name}
                     onChange={e => setCardForm({ ...cardForm, name: e.target.value })}
