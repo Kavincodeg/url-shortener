@@ -95,7 +95,7 @@ const BillingPage = () => {
                 <Zap size={14} /> Upgrade to Pro
               </button>
             ) : (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#3730A3', fontWeight: 700, fontSize: '0.9375rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--primary)', fontWeight: 700, fontSize: '0.9375rem' }}>
                 <ShieldCheck size={20} color="var(--primary)" /> Premium Active
               </div>
             )}
@@ -239,7 +239,7 @@ const BillingPage = () => {
                     <td style={{ padding: '0.875rem 0.5rem', fontWeight: 500 }}>Linko Pro Subscription — Monthly</td>
                     <td style={{ padding: '0.875rem 0.5rem' }}>$9.00</td>
                     <td style={{ padding: '0.875rem 0.5rem' }}>
-                      <span style={{ fontSize: '0.75rem', padding: '0.125rem 0.5rem', borderRadius: 4, background: 'var(--success-light)', color: '#065F46', fontWeight: 600 }}>Paid</span>
+                      <span style={{ fontSize: '0.75rem', padding: '0.125rem 0.5rem', borderRadius: 4, background: 'var(--success-light)', color: 'var(--success)', fontWeight: 600 }}>Paid</span>
                     </td>
                   </tr>
                 )}
@@ -248,7 +248,7 @@ const BillingPage = () => {
                   <td style={{ padding: '0.875rem 0.5rem' }}>Free Plan Account Creation</td>
                   <td style={{ padding: '0.875rem 0.5rem' }}>$0.00</td>
                   <td style={{ padding: '0.875rem 0.5rem' }}>
-                    <span style={{ fontSize: '0.75rem', padding: '0.125rem 0.5rem', borderRadius: 4, background: 'var(--bg-secondary)', color: '#475569', fontWeight: 600 }}>Active</span>
+                    <span style={{ fontSize: '0.75rem', padding: '0.125rem 0.5rem', borderRadius: 4, background: 'var(--bg-secondary)', color: 'var(--text-secondary)', fontWeight: 600 }}>Active</span>
                   </td>
                 </tr>
               </tbody>

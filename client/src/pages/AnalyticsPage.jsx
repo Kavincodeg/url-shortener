@@ -129,7 +129,7 @@ const AnalyticsPage = () => {
 
         {/* KPI Cards */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', marginBottom: '1.5rem' }}>
-          <StatCard icon={TrendingUp} label="Total Clicks" value={data.totalClicks?.toLocaleString()} sub={data.totalClicks > 0 ? `+${data.totalClicks} total` : undefined} color="#4F46E5" />
+          <StatCard icon={TrendingUp} label="Total Clicks" value={data.totalClicks?.toLocaleString()} sub={data.totalClicks > 0 ? `+${data.totalClicks} total` : undefined} color="var(--primary)" />
           <StatCard icon={Users} label="Unique Clicks" value={data.uniqueClicks?.toLocaleString()} color="#059669" />
           <StatCard icon={Clock} label="Last Click" value={data.lastClick ? formatDistanceToNow(new Date(data.lastClick), { addSuffix: true }) : 'Never'} color="#D97706" />
           <StatCard icon={BarChart2} label="Avg. Daily Clicks" value={data.avgDailyClicks} color="#7C3AED" />

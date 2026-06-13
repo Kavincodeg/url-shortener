@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Zap, Link2, BarChart3, QrCode, Shield, ArrowRight, Check, TrendingUp, Globe, Clock } from 'lucide-react';
+import { BarChart3, Link2, QrCode, Shield, ArrowRight } from 'lucide-react';
 
 const features = [
   { icon: Link2, title: 'Instant Short Links', desc: 'Shorten long URLs in seconds with our blazing fast service.' },
@@ -21,11 +21,8 @@ const LandingPage = () => {
       {/* Navbar */}
       <nav className="landing-nav">
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 1.5rem', height: 60, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none' }}>
-            <div style={{ width: 32, height: 32, background: 'linear-gradient(135deg, #2563EB, #7C3AED)', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Zap size={16} color="white" />
-            </div>
-            <span style={{ fontWeight: 800, fontSize: '1.25rem', color: 'var(--text-primary)' }}>Linko</span>
+          <Link to="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
+            <img src="/logo.png" alt="Linko" style={{ height: 30, objectFit: 'contain' }} />
           </Link>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
@@ -168,10 +165,7 @@ const LandingPage = () => {
       <footer style={{ borderTop: '1px solid var(--border)', padding: '2rem 1.5rem' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <div style={{ width: 24, height: 24, background: 'linear-gradient(135deg, #2563EB, #7C3AED)', borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Zap size={12} color="white" />
-            </div>
-            <span style={{ fontWeight: 700, color: 'var(--text-primary)' }}>Linko</span>
+            <img src="/logo.png" alt="Linko" style={{ height: 24, objectFit: 'contain' }} />
           </div>
           <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>© 2024 Linko. All rights reserved.</p>
         </div>
