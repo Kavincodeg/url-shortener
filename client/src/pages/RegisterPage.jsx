@@ -9,7 +9,7 @@ const RegisterPage = () => {
   const [showPw, setShowPw] = useState(false);
   const [agreed, setAgreed] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { register } = useAuth();
+  const { sendOtp } = useAuth();
   const navigate = useNavigate();
 
   const pwStrength = form.password.length === 0 ? 0 : form.password.length < 6 ? 1 : form.password.length < 10 ? 2 : 3;
@@ -22,11 +22,11 @@ const RegisterPage = () => {
     if (!agreed) return toast.error('Please agree to the terms');
     setLoading(true);
     try {
-      await register(form.name, form.email, form.password);
-      toast.success('Account created! Welcome to Linko 🎉');
-      navigate('/dashboard');
+      await sendOtp(form.name, form.email, form.password);
+      toast.success('Verification code sent to your email! 📧');
+      navigate('/verify-otp', { state: { name: form.name, email: form.email, password: form.password } });
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Registration failed');
+      toast.error(err.response?.data?.message || 'Failed to send verification code');
     } finally {
       setLoading(false);
     }
@@ -130,7 +130,7 @@ const RegisterPage = () => {
             </div>
 
             <button type="submit" className="btn-primary" disabled={loading} style={{ justifyContent: 'center', height: 42, fontSize: '0.9375rem', marginTop: '0.25rem' }}>
-              {loading ? <><Loader2 size={16} style={{ animation: 'spin 0.6s linear infinite' }} /> Creating account...</> : 'Sign up'}
+              {loading ? <><Loader2 size={16} style={{ animation: 'spin 0.6s linear infinite' }} /> Sending code...</> : 'Continue with email'}
             </button>
           </form>
 

@@ -7,6 +7,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
+import OTPPage from './pages/OTPPage';
 import PublicStatsPage from './pages/PublicStatsPage';
 import OAuthSuccessPage from './pages/OAuthSuccessPage';
 
@@ -29,6 +30,7 @@ const App = () => {
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/verify-otp" element={<OTPPage />} />
           <Route path="/stats/:shortCode" element={<PublicStatsPage />} />
           <Route path="/oauth-success" element={<OAuthSuccessPage />} />
 

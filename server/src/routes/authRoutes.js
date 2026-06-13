@@ -1,7 +1,7 @@
 const express = require('express');
 const passport = require('passport');
 const { body } = require('express-validator');
-const { register, login, getMe, updateProfile, changePassword, upgradePlan, googleCallback, uploadAvatar } = require('../controllers/authController');
+const { register, login, getMe, updateProfile, changePassword, upgradePlan, googleCallback, uploadAvatar, sendOTP, verifyOTP } = require('../controllers/authController');
 const { protect } = require('../middleware/auth');
 const { authLimiter } = require('../middleware/rateLimiter');
 const { uploadAvatar: uploadAvatarMiddleware } = require('../middleware/upload');
@@ -13,6 +13,18 @@ router.post('/register', authLimiter, [
   body('email').isEmail().withMessage('Valid email is required'),
   body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
 ], register);
+
+// OTP-based registration (2-step)
+router.post('/send-otp', authLimiter, [
+  body('name').trim().notEmpty().withMessage('Name is required'),
+  body('email').isEmail().withMessage('Valid email is required'),
+  body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
+], sendOTP);
+
+router.post('/verify-otp', authLimiter, [
+  body('email').isEmail().withMessage('Valid email is required'),
+  body('otp').isLength({ min: 6, max: 6 }).withMessage('OTP must be 6 digits'),
+], verifyOTP);
 
 router.post('/login', authLimiter, [
   body('email').isEmail().withMessage('Valid email is required'),

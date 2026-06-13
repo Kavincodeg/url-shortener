@@ -1,6 +1,10 @@
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+const crypto = require('crypto');
 const { validationResult } = require('express-validator');
 const User = require('../models/User');
+const OTP = require('../models/OTP');
+const { sendOTPEmail } = require('../services/emailService');
 
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRE || '7d' });
@@ -188,6 +192,107 @@ const uploadAvatar = async (req, res, next) => {
   }
 };
 
+// @desc    Step 1 of registration — send OTP to email
+// @route   POST /api/auth/send-otp
+const sendOTP = async (req, res, next) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ success: false, message: errors.array()[0].msg });
+    }
+
+    const { name, email, password } = req.body;
+
+    // Block if email already has a verified account
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ success: false, message: 'Email already registered. Please log in.' });
+    }
+
+    // Generate a 6-digit OTP
+    const otp = crypto.randomInt(100000, 999999).toString();
+
+    // Hash password + OTP before storing
+    const [hashedPassword, hashedOtp] = await Promise.all([
+      bcrypt.hash(password, 12),
+      bcrypt.hash(otp, 10),
+    ]);
+
+    // Upsert: replace any existing pending OTP for this email
+    await OTP.findOneAndDelete({ email });
+    await OTP.create({ email, name, hashedPassword, hashedOtp });
+
+    // Send email
+    await sendOTPEmail(email, otp, name);
+
+    res.json({ success: true, message: `Verification code sent to ${email}` });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Step 2 of registration — verify OTP and create account
+// @route   POST /api/auth/verify-otp
+const verifyOTP = async (req, res, next) => {
+  try {
+    const { email, otp } = req.body;
+
+    if (!email || !otp) {
+      return res.status(400).json({ success: false, message: 'Email and OTP are required' });
+    }
+
+    const record = await OTP.findOne({ email });
+    if (!record) {
+      return res.status(400).json({ success: false, message: 'OTP expired or not found. Please request a new one.' });
+    }
+
+    // Brute-force guard
+    if (record.attempts >= 5) {
+      await OTP.deleteOne({ email });
+      return res.status(429).json({ success: false, message: 'Too many incorrect attempts. Please register again.' });
+    }
+
+    const isMatch = await bcrypt.compare(otp, record.hashedOtp);
+    if (!isMatch) {
+      record.attempts += 1;
+      await record.save();
+      const left = 5 - record.attempts;
+      return res.status(400).json({ success: false, message: `Incorrect code. ${left} attempt${left === 1 ? '' : 's'} remaining.` });
+    }
+
+    // OTP correct — create the user (password is already hashed; bypass pre-save hook)
+    const user = new User({ name: record.name, email: record.email });
+    user.password = record.hashedPassword; // already hashed
+    // Mark password as not-modified so the pre-save hook won't double-hash
+    user.$locals = user.$locals || {};
+    await User.collection.insertOne({
+      name: record.name,
+      email: record.email,
+      password: record.hashedPassword,
+      plan: 'free',
+      profileImage: '',
+      timezone: 'UTC',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+
+    // Clean up OTP record
+    await OTP.deleteOne({ email });
+
+    // Fetch the created user doc for response
+    const newUser = await User.findOne({ email });
+    const token = generateToken(newUser._id);
+
+    res.status(201).json({
+      success: true,
+      token,
+      user: { id: newUser._id, name: newUser.name, email: newUser.email, plan: newUser.plan, profileImage: newUser.profileImage, timezone: newUser.timezone },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   register,
   login,
@@ -197,4 +302,6 @@ module.exports = {
   upgradePlan,
   googleCallback,
   uploadAvatar,
+  sendOTP,
+  verifyOTP,
 };

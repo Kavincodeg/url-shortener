@@ -45,6 +45,21 @@ export const AuthProvider = ({ children }) => {
     return data;
   };
 
+  // Step 1: send OTP to email (does NOT log in yet)
+  const sendOtp = async (name, email, password) => {
+    const { data } = await api.post('/auth/send-otp', { name, email, password });
+    return data;
+  };
+
+  // Step 2: verify OTP and finish registration (logs in)
+  const verifyOtp = async (email, otp) => {
+    const { data } = await api.post('/auth/verify-otp', { email, otp });
+    localStorage.setItem('linko_token', data.token);
+    localStorage.setItem('linko_user', JSON.stringify(data.user));
+    setUser(data.user);
+    return data;
+  };
+
   const logout = () => {
     localStorage.removeItem('linko_token');
     localStorage.removeItem('linko_user');
@@ -63,7 +78,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout, updateUser, loginWithToken }}>
+    <AuthContext.Provider value={{ user, loading, login, register, logout, updateUser, loginWithToken, sendOtp, verifyOtp }}>
       {children}
     </AuthContext.Provider>
   );
