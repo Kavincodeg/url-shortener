@@ -3,10 +3,16 @@
 **/dist/
 **/build/
 
-# Ignore sensitive env files
+# Ignore sensitive env files (never commit real secrets)
 **/.env
 **/.env.local
+**/.env.production
+**/.env.staging
+**/.env.development
 **/.env*.local
+**/.env.*
+# Allow .env.example files (must contain only placeholders, NO real secrets)
+!**/.env.example
 
 # Ignore local uploaded assets
 **/public/uploads/*
