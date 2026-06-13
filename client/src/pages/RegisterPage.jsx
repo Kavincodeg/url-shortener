@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, Loader2, Zap, Check } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
+import Logo from '../components/Logo';
 
 const RegisterPage = () => {
   const [form, setForm] = useState({ name: '', email: '', password: '', confirm: '' });
@@ -43,7 +44,7 @@ const RegisterPage = () => {
       <div className="animate-fade-in" style={{ width: '100%', maxWidth: 440 }}>
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
           <Link to="/" style={{ display: 'inline-flex', alignItems: 'center', textDecoration: 'none' }}>
-            <img src="/logo.png" alt="Linko" style={{ height: 36, objectFit: 'contain' }} />
+            <Logo height={34} />
           </Link>
         </div>
 

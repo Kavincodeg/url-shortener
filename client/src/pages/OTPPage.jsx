@@ -3,6 +3,7 @@ import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { Loader2, Zap, Mail, RotateCcw, ArrowLeft, ShieldCheck } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
+import Logo from '../components/Logo';
 
 const RESEND_COOLDOWN = 60; // seconds
 
@@ -115,7 +116,7 @@ const OTPPage = () => {
         {/* Logo */}
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
           <Link to="/" style={{ display: 'inline-flex', alignItems: 'center', textDecoration: 'none' }}>
-            <img src="/logo.png" alt="Linko" style={{ height: 36, objectFit: 'contain' }} />
+            <Logo height={34} />
           </Link>
         </div>
 

@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { BarChart3, Link2, QrCode, Shield, ArrowRight } from 'lucide-react';
+import Logo from '../components/Logo';
 
 const features = [
   { icon: Link2, title: 'Instant Short Links', desc: 'Shorten long URLs in seconds with our blazing fast service.' },
@@ -22,7 +23,7 @@ const LandingPage = () => {
       <nav className="landing-nav">
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 1.5rem', height: 60, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <Link to="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
-            <img src="/logo.png" alt="Linko" style={{ height: 30, objectFit: 'contain' }} />
+            <Logo height={28} />
           </Link>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
@@ -164,8 +165,8 @@ const LandingPage = () => {
       {/* Footer */}
       <footer style={{ borderTop: '1px solid var(--border)', padding: '2rem 1.5rem' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <img src="/logo.png" alt="Linko" style={{ height: 24, objectFit: 'contain' }} />
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <Logo height={22} />
           </div>
           <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>© 2024 Linko. All rights reserved.</p>
         </div>

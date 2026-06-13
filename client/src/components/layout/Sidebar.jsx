@@ -1,5 +1,6 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import Logo from '../Logo';
 import {
   LayoutDashboard, Link2, BarChart3, QrCode, Upload,
   Settings, CreditCard, User, LogOut
@@ -30,7 +31,7 @@ const Sidebar = () => {
       {/* Logo */}
       <div style={{ padding: '1rem', borderBottom: '1px solid var(--border)' }}>
         <NavLink to="/dashboard" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
-          <img src="/logo.png" alt="Linko" style={{ height: 32, objectFit: 'contain' }} />
+          <Logo height={30} />
         </NavLink>
       </div>
 

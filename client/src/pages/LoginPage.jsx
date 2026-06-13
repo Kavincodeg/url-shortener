@@ -3,6 +3,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
+import Logo from '../components/Logo';
 
 const LoginPage = () => {
   const [form, setForm] = useState({ email: '', password: '' });
@@ -46,7 +47,7 @@ const LoginPage = () => {
         {/* Logo */}
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
           <Link to="/" style={{ display: 'inline-flex', alignItems: 'center', textDecoration: 'none' }}>
-            <img src="/logo.png" alt="Linko" style={{ height: 36, objectFit: 'contain' }} />
+            <Logo height={34} />
           </Link>
         </div>
 
